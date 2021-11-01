@@ -1,0 +1,89 @@
+Global
+#define INT_GLBL0    0x00 
+#define INT_GLBL1    0x04 
+#define ERCFLAG      0x05 
+#define STAT_GLBL    0x06 
+#define INTM_GLBL0   0x08 
+#define INTM_GLBL1   0x09 
+#define CNFG_GLBL    0x10 
+#define CNFG_GPIO0   0x11 
+#define CNFG_GPIO1   0x12 
+#define CNFG_GPIO2   0x13 
+#define CID          0x14 
+#define CNFG_WDT     0x17 
+
+Charger
+#define INT_CHG     0x01 
+#define STAT_CHG_A  0x02 
+#define STAT_CHG_B  0x03 
+#define INT_M_CHG   0x07 
+#define CNFG_CHG_A  0x20 
+#define CNFG_CHG_B  0x21 
+#define CNFG_CHG_C  0x22 
+#define CNFG_CHG_D  0x23 
+#define CNFG_CHG_E  0x24 
+#define CNFG_CHG_F  0x25 
+#define CNFG_CHG_G  0x26 
+#define CNFG_CHG_H  0x27 
+#define NFG_CHG_I   0x28 
+
+SBB
+#define CNFG_SBB_TOP        0x38 
+#define CNFG_SBB0_A         0x39 
+#define CNFG_SBB0_B         0x3A 
+#define CNFG_SBB1_A         0x3B 
+#define CNFG_SBB1_B         0x3C 
+#define CNFG_SBB2_A         0x3D 
+#define CNFG_SBB2_B         0x3E 
+#define CNFG_DVS_SBB0_A     0x3F 
+
+LDO
+#define CNFG_LDO0_A  0x48 
+#define CNFG_LDO0_B  0x49 
+#define CNFG_LDO1_A  0x4A 
+#define CNFG_LDO1_B  0x4B 
+
+Fuel Gauge
+#define Status and Configuration Registers
+#define Status	   0x00 
+#define VAlrtTh    0x01 
+#define TAlrtTh	   0x02 
+#define SAlrtTh	   0x03 
+#define FullSOCThr 0x13 
+#define DesignCap  0x18 
+#define Config     0x1D 
+#define IChgTerm   0x1E 
+#define DevName    0x21 
+#define LearnCfg   0x28 
+#define FilterCfg  0x29 
+#define VEmpty     0x3A 
+#define Power      0xB1 
+#define AvgPower   0xB3 
+#define IAlrtTh    0xB4 
+#define Config2    0xBB 
+
+Measurement Registers
+#define Temp       0x08 
+#define Vcell      0x09 
+#define Current    0x0A 
+#define AvgCurrent 0x0B 
+#define AvgTA      0x16 
+#define AvgVCell   0x19 
+#define MaxMinTemp 0x1A 
+#define MaxMinVolt 0x1B 
+#define MaxMinCurr 0x1C 
+#define AIN0       0x27 
+#define Timer      0x3E 
+#define TimerH     0xBE 
+
+ModelGauge m5 Output Registers
+#define RepCap      0x05	
+#define RepSOC      0x06	
+#define AvSOC       0x0E	
+#define FullCapRep  0x10	
+#define TTE         0x11	
+#define RCell       0x14	
+#define Cycles      0x17	
+#define AvCap       0x1F	
+#define TTF         0x20 	
+
