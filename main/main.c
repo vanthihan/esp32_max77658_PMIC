@@ -1,16 +1,24 @@
+#include <stdio.h>
 #include "freertos/FreeRTOS.h"
-#include "esp_wifi.h"
-#include "esp_system.h"
-#include "esp_event.h"
-#include "esp_event_loop.h"
-#include "nvs_flash.h"
-#include "driver/gpio.h"
+#include "sdkconfig.h"
+#include "esp_log.h"
+
+#include "bsp.h"
+#include "max77658_apps.h"
+#include "pmic_task.h"
+
+static const char *TAG = "MAIN APP";
 
 
-void app_main(void)
+void app_main()
 {
-    while (true) {
-        vTaskDelay(300 / portTICK_PERIOD_MS);
-    }
-}
+   ESP_LOGI(TAG, "=======BEGIN======");
 
+//   xTaskCreate(&lsm_main_task, "lsm_main_task", (5 * 1024), NULL, 1, NULL);
+
+   while(1)
+   {
+      ESP_LOGI(TAG, "Looping");
+      bsp_delay_ms(1000);
+   }
+}
