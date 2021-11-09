@@ -1,10 +1,10 @@
+#include <max77658.h>
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "sdkconfig.h"
 #include "esp_log.h"
 
 #include "bsp.h"
-#include "max77658_apps.h"
 #include "pmic_task.h"
 
 static const char *TAG = "MAIN APP";

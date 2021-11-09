@@ -14,9 +14,12 @@
 #include "bsp.h"
 
 /* Private defines ---------------------------------------------------- */
+/* POR Mask */
+#define MAX17055_POR_MASK               (0xFFFD)
+#define MAX17055_CYCLE_MASK             (0x0002)
 
 /* STATUS register bits */
-#define MAX1726X_STATUS_BST             (1 << 3)
+#define STATUS_BST             (1 << 3)
 #define MAX77658_STATUS_POR             (1 << 1)
 
 /* MODELCFG register bits */
@@ -29,7 +32,7 @@
 #define MIN_TEMP_ALERT                  0
 #define MAX_TEMP_ALERT                  8
 
-#define MAX1726X_VMAX_TOLERANCE     50 /* 50 mV */
+#define VMAX_TOLERANCE     50 /* 50 mV */
 
 /* Private enumerate/structure ---------------------------------------- */
 /* Private macros ----------------------------------------------------- */
@@ -43,51 +46,50 @@ static const char *TAG = "MAX77658 REG";
 /* Function definitions ----------------------------------------------- */
 
 /**
-  * @brief  Read generic device register
-  *
-  * @param  ctx   communication interface handler.(ptr)
-  * @param  reg   first register address to read.
-  * @param  data  buffer for data read.(ptr)
-  * @param  len   number of consecutive register to read.
-  * @retval       interface status (MANDATORY: return 0 -> no Error)
-  *
-  */
-int32_t max77658_read_reg(maxdev_ctx_t *ctx, uint8_t reg_address, uint16_t *val)
+ * @brief      Reads from MAX17055 register.
+ *
+ * @param[in]  reg_addr  The register address
+ * @param      value     The value
+ *
+ * @retval     0 on success
+ * @retval     non-0 for errors
+ */
+int32_t max77658_read_reg(maxdev_ctx_t *ctx, uint8_t reg_addr, uint16_t *value)
 {
-   uint16_t ret;
-   uint8_t buff[2];
-   uint8_t len = 16;
+   int32_t ret;
+   uint16_t mask = 0x00FF;
+   uint8_t read_data[2];
 
-   ret = ctx->read_reg(ctx->device_address, reg_address, buff, len);
-   if(ret > 0)
+   ret = ctx->read_reg(ctx->device_address, reg_addr, read_data, 2);
+   if(ret == 0)
    {
-      *val = buff[1];
-      *val = (*val * 256U) +  buff[0];
+      *value = (((read_data[1] & mask) << 8) + (read_data[0]));
    }
 
    return ret;
 }
 
 /**
-  * @brief  Write generic device register
-  *
-  * @param  ctx   communication interface handler.(ptr)
-  * @param  reg   first register address to write.
-  * @param  data  the buffer contains data to be written.(ptr)
-  * @param  len   number of consecutive register to write.
-  * @retval       interface status (MANDATORY: return 0 -> no Error)
-  *
-  */
-int32_t max77658_write_reg(maxdev_ctx_t *ctx, uint8_t reg, uint16_t data)
+ * @brief      Writes a register.
+ *
+ * @param[in]  reg_addr  The register address
+ * @param[in]  reg_data  The register data
+ *
+ * @retval     0 on success
+ * @retval     non-0 for errors
+ */
+int32_t max77658_write_reg(maxdev_ctx_t *ctx, uint8_t reg_addr, uint16_t reg_data)
 {
    int32_t ret;
-   uint8_t buff[2];
-   uint8_t len = 16;
+   uint16_t mask = 0x00FF;
+   uint8_t dataLSB;
+   uint8_t dataMSB;
 
-   buff[1] = (uint8_t)(data / 256U);
-   buff[0] = (uint8_t)(data - (buff[1] * 256U));
+   dataLSB = reg_data & mask;
+   dataMSB = (reg_data >> 8) & mask;
+   uint8_t buff[2] = {dataLSB, dataMSB};
 
-   ret = ctx->write_reg(ctx->device_address, reg, buff, len);
+   ret = ctx->write_reg(ctx->device_address, reg_addr, buff, 2);
 
    return ret;
 }
@@ -111,12 +113,12 @@ static bool max77658_write_verify_reg(maxdev_ctx_t *ctx, uint8_t reg_address, ui
    return ret;
 }
 
-static inline int max1726x_lsb_to_uvolts(int lsb)
+static inline int lsb_to_uvolts(int lsb)
 {
    return lsb * 625 / 8; /* 78.125uV per bit */
 }
 
-static int max1726x_raw_current_to_uamps(maxdev_ctx_t *ctx, uint32_t curr)
+static int raw_current_to_uamps(maxdev_ctx_t *ctx, uint32_t curr)
 {
     int res = curr;
 
@@ -133,7 +135,7 @@ static int32_t max77658_version_get(maxdev_ctx_t *ctx)
    int32_t ret;
    uint16_t version;
 
-   ret = max77658_read_reg(ctx, MAX1726X_VERSION_REG, &version);
+   ret = max77658_read_reg(ctx, VERSION_REG, &version);
 
    if(ret > 0)
    {
@@ -143,14 +145,14 @@ static int32_t max77658_version_get(maxdev_ctx_t *ctx)
    return ret;
 }
 
-static int32_t max77568_POR_status_get(maxdev_ctx_t *ctx)
+static int32_t max77658_POR_status_get(maxdev_ctx_t *ctx)
 {
    int32_t ret;
    uint16_t data;
 
    /* Step 0: Check for POR */
    /* Skip load model if POR bit is cleared */
-   ret = max77658_read_reg(ctx, MAX1726X_STATUS_REG, &data);
+   ret = max77658_read_reg(ctx, STATUS_REG, &data);
    /* Skip load custom model */
    if(ret > 0)
    {
@@ -190,166 +192,166 @@ static int32_t max77658_flag_polling(maxdev_ctx_t *ctx, uint8_t reg_address, int
    return ret;
 }
 
-static int32_t max77568_config_option_1(maxdev_ctx_t *ctx, uint16_t hibcfg)
+static int32_t max77658_config_option_1(maxdev_ctx_t *ctx, uint16_t hibcfg)
 {
    int32_t ret;
 
    /* Step 2.1: Option 1 EZ Config */
-   ret = max77658_write_reg(ctx, MAX1726X_DESIGNCAP_REG, ctx->pdata->designcap);
-   ret = max77658_write_reg(ctx, MAX1726X_ICHGTERM_REG, ctx->pdata->ichgterm);
-   ret = max77658_write_reg(ctx, MAX1726X_VEMPTY_REG, ctx->pdata->vempty);
+   ret = max77658_write_reg(ctx, DESIGNCAP_REG, ctx->pdata->designcap);
+   ret = max77658_write_reg(ctx, ICHGTERM_REG, ctx->pdata->ichgterm);
+   ret = max77658_write_reg(ctx, VEMPTY_REG, ctx->pdata->vempty);
 
    if(ctx->pdata->vcharge > 4275)
    {
-      ret = max77658_write_reg(ctx, MAX1726X_MODELCFG_REG, 0x8400);
+      ret = max77658_write_reg(ctx, MODELCFG_REG, 0x8400);
    }
    else
    {
-      ret = max77658_write_reg(ctx, MAX1726X_MODELCFG_REG, 0x8000);
+      ret = max77658_write_reg(ctx, MODELCFG_REG, 0x8000);
    }
 
    /* Poll ModelCFG.ModelRefresh bit for clear */
-   ret = max77658_flag_polling(ctx, MAX1726X_MODELCFG_REG, MAX77658_MODELCFG_REFRESH, 500);
+   ret = max77658_flag_polling(ctx, MODELCFG_REG, MAX77658_MODELCFG_REFRESH, 500);
    if(ret < 0)
    {
        ESP_LOGE(TAG, "Option1 model refresh not completed!\n");
        return ret;
    }
 
-   ret = max77658_write_reg(ctx, MAX1726X_HIBCFG_REG, hibcfg); // Restore Original HibCFG value
+   ret = max77658_write_reg(ctx, HIBCFG_REG, hibcfg); // Restore Original HibCFG value
 
    return ret;
 }
 
-static int32_t max77568_config_option_2(maxdev_ctx_t *ctx, uint16_t hibcfg)
+static int32_t max77658_config_option_2(maxdev_ctx_t *ctx, uint16_t hibcfg)
 {
    int32_t ret;
 
    /* Step 2.2: Option 2 Custom Short INI without OCV Table */
-   ret = max77658_write_reg(ctx, MAX1726X_DESIGNCAP_REG, ctx->pdata->designcap);
-   ret = max77658_write_reg(ctx, MAX1726X_ICHGTERM_REG, ctx->pdata->ichgterm);
-   ret = max77658_write_reg(ctx, MAX1726X_VEMPTY_REG, ctx->pdata->vempty);
-   max77658_write_verify_reg(ctx, MAX1726X_LEARNCFG_REG, ctx->pdata->learncfg); /* Optional */
-   max77658_write_verify_reg(ctx, MAX1726X_FULLSOCTHR_REG, ctx->pdata->fullsocthr); /* Optional */
+   ret = max77658_write_reg(ctx, DESIGNCAP_REG, ctx->pdata->designcap);
+   ret = max77658_write_reg(ctx, ICHGTERM_REG, ctx->pdata->ichgterm);
+   ret = max77658_write_reg(ctx, VEMPTY_REG, ctx->pdata->vempty);
+   max77658_write_verify_reg(ctx, LEARNCFG_REG, ctx->pdata->learncfg); /* Optional */
+   max77658_write_verify_reg(ctx, FULLSOCTHR_REG, ctx->pdata->fullsocthr); /* Optional */
 
-   ret = max77658_write_reg(ctx, MAX1726X_MODELCFG_REG, ctx->pdata->modelcfg);
+   ret = max77658_write_reg(ctx, MODELCFG_REG, ctx->pdata->modelcfg);
 
    /* Poll ModelCFG.ModelRefresh bit for clear */
-   ret = max77658_flag_polling(ctx, MAX1726X_MODELCFG_REG, MAX77658_MODELCFG_REFRESH, 500);
+   ret = max77658_flag_polling(ctx, MODELCFG_REG, MAX77658_MODELCFG_REFRESH, 500);
    if(ret < 0)
    {
       ESP_LOGE(TAG, "Option2 model refresh not completed!\n");
       return ret;
    }
 
-   ret = max77658_write_reg(ctx, MAX1726X_RCOMP0_REG, ctx->pdata->rcomp0);
-   ret = max77658_write_reg(ctx, MAX1726X_TEMPCO_REG, ctx->pdata->tempco);
-   ret = max77658_write_reg(ctx, MAX1726X_QRTABLE00_REG, ctx->pdata->qrtable00);
-   ret = max77658_write_reg(ctx, MAX1726X_QRTABLE10_REG, ctx->pdata->qrtable10);
-   ret = max77658_write_reg(ctx, MAX1726X_QRTABLE20_REG, ctx->pdata->qrtable20);  /* Optional */
-   ret = max77658_write_reg(ctx, MAX1726X_QRTABLE30_REG, ctx->pdata->qrtable30);  /* Optional */
+   ret = max77658_write_reg(ctx, RCOMP0_REG, ctx->pdata->rcomp0);
+   ret = max77658_write_reg(ctx, TEMPCO_REG, ctx->pdata->tempco);
+   ret = max77658_write_reg(ctx, QRTABLE00_REG, ctx->pdata->qrtable00);
+   ret = max77658_write_reg(ctx, QRTABLE10_REG, ctx->pdata->qrtable10);
+   ret = max77658_write_reg(ctx, QRTABLE20_REG, ctx->pdata->qrtable20);  /* Optional */
+   ret = max77658_write_reg(ctx, QRTABLE30_REG, ctx->pdata->qrtable30);  /* Optional */
 
-   ret = max77658_write_reg(ctx, MAX1726X_HIBCFG_REG, hibcfg); // Restore Original HibCFG value
+   ret = max77658_write_reg(ctx, HIBCFG_REG, hibcfg); // Restore Original HibCFG value
 
    return ret;
 }
 
-static int32_t max77568_config_option_3(maxdev_ctx_t *ctx, uint16_t hibcfg)
+static int32_t max77568_fg_config_option_3(maxdev_ctx_t *ctx, uint16_t hibcfg)
 {
    int32_t ret;
    /* Step 2.3: Option 3 Custom Full INI with OCV Table */
    /* Steps 2.3.1-3: Unlock model access, write/read/verify custom model,
                                      lock model access */
 
-//   ret = max1726x_load_model(priv);
+//   ret = load_model(priv);
 //   if(ret){
 //   dev_err(priv->dev, "Option3 model table write unsuccessful!\n");
 //   return ret;
 //   }
 //
 //   /* Steps 2.3.4: Verify that model access is locked */
-//   ret = max1726x_verify_model_lock(priv);
+//   ret = verify_model_lock(priv);
 //   if(ret){
 //   dev_err(priv->dev, "Option3 model unlock unsuccessful!\n");
 //   return ret;
 //   }
 //
 //   /* Step 2.3.5 Write custom paramaters */
-//   regmap_write(regmap, MAX1726X_REPCAP_REG, 0x0);
-//   regmap_write(regmap, MAX1726X_DESIGNCAP_REG, pdata->designcap);
-//   regmap_write(regmap, MAX1726X_DPACC_REG, 0xC80);
-//   regmap_write(regmap, MAX1726X_ICHGTERM_REG, pdata->ichgterm);
-//   regmap_write(regmap, MAX1726X_VEMPTY_REG, pdata->vempty);
-//   regmap_write(regmap, MAX1726X_RCOMP0_REG, pdata->rcomp0);
-//   regmap_write(regmap, MAX1726X_TEMPCO_REG, pdata->tempco);
-//   regmap_write(regmap, MAX1726X_QRTABLE00_REG, pdata->qrtable00);
-//   regmap_write(regmap, MAX1726X_QRTABLE10_REG, pdata->qrtable10);
-//   regmap_write(regmap, MAX1726X_QRTABLE20_REG, pdata->qrtable20);  /* Optional */
-//   regmap_write(regmap, MAX1726X_QRTABLE30_REG, pdata->qrtable30);  /* Optional */
+//   regmap_write(regmap, REPCAP_REG, 0x0);
+//   regmap_write(regmap, DESIGNCAP_REG, pdata->designcap);
+//   regmap_write(regmap, DPACC_REG, 0xC80);
+//   regmap_write(regmap, ICHGTERM_REG, pdata->ichgterm);
+//   regmap_write(regmap, VEMPTY_REG, pdata->vempty);
+//   regmap_write(regmap, RCOMP0_REG, pdata->rcomp0);
+//   regmap_write(regmap, TEMPCO_REG, pdata->tempco);
+//   regmap_write(regmap, QRTABLE00_REG, pdata->qrtable00);
+//   regmap_write(regmap, QRTABLE10_REG, pdata->qrtable10);
+//   regmap_write(regmap, QRTABLE20_REG, pdata->qrtable20);  /* Optional */
+//   regmap_write(regmap, QRTABLE30_REG, pdata->qrtable30);  /* Optional */
 //
 //   /* Optional */
-//   max1726x_write_verify_reg(regmap, MAX1726X_LEARNCFG_REG, pdata->learncfg);
-//   regmap_write(regmap, MAX1726X_RELAXCFG_REG, pdata->relaxcfg);
-//   regmap_write(regmap, MAX1726X_CONFIG_REG, pdata->config);
-//   regmap_write(regmap, MAX1726X_CONFIG2_REG, pdata->config2);
-//   regmap_write(regmap, MAX1726X_FULLSOCTHR_REG, pdata->fullsocthr);
-//   regmap_write(regmap, MAX1726X_TGAIN_REG, pdata->tgain);
-//   regmap_write(regmap, MAX1726X_TOFF_REG, pdata->toff);
-//   regmap_write(regmap, MAX1726X_CURVE_REG, pdata->curve);
+//   write_verify_reg(regmap, LEARNCFG_REG, pdata->learncfg);
+//   regmap_write(regmap, RELAXCFG_REG, pdata->relaxcfg);
+//   regmap_write(regmap, CONFIG_REG, pdata->config);
+//   regmap_write(regmap, CONFIG2_REG, pdata->config2);
+//   regmap_write(regmap, FULLSOCTHR_REG, pdata->fullsocthr);
+//   regmap_write(regmap, TGAIN_REG, pdata->tgain);
+//   regmap_write(regmap, TOFF_REG, pdata->toff);
+//   regmap_write(regmap, CURVE_REG, pdata->curve);
 //
 //   /* Step 2.3.6 Initiate model loading */
-//   regmap_read(regmap, MAX1726X_CONFIG2_REG, &reg);
-//   regmap_write(regmap, MAX1726X_CONFIG2_REG, reg | MAX1726X_CONFIG2_LDMDL); /* Set Config2.LdMdl bit */
+//   regmap_read(regmap, CONFIG2_REG, &reg);
+//   regmap_write(regmap, CONFIG2_REG, reg | CONFIG2_LDMDL); /* Set Config2.LdMdl bit */
 //
 //   /* Step 2.3.7 Poll the Config2.LdMdl=0 */
-//   ret = max1726x_poll_flag_clear(regmap, MAX1726X_CONFIG2_REG, MAX1726X_CONFIG2_LDMDL, 5000);
+//   ret = poll_flag_clear(regmap, CONFIG2_REG, CONFIG2_LDMDL, 5000);
 //   if(ret < 0){
 //      dev_err(priv->dev, "Option3 LdMdl not completed!\n");
 //      return ret;
 //   }
 //
 //   /* Step 2.3.8 Update QRTable20 and QRTable30*/
-//   max1726x_write_verify_reg(regmap, MAX1726X_QRTABLE20_REG, pdata->qrtable20);
-//   max1726x_write_verify_reg(regmap, MAX1726X_QRTABLE30_REG, pdata->qrtable30);
+//   write_verify_reg(regmap, QRTABLE20_REG, pdata->qrtable20);
+//   write_verify_reg(regmap, QRTABLE30_REG, pdata->qrtable30);
 //
 //   /* Step 2.3.9 Restore original HibCfg */
-//   regmap_write(regmap, MAX1726X_HIBCFG_REG, hibcfg);
+//   regmap_write(regmap, HIBCFG_REG, hibcfg);
 
    return ret;
 }
 
 static void max77658_set_alert_thresholds(maxdev_ctx_t *ctx)
 {
-    struct max1726x_platform_data *pdata = ctx->pdata;
+    platform_data *pdata = ctx->pdata;
     uint16_t val;
 
     /* Set VAlrtTh */
     val = (pdata->volt_min / 20);
     val |= ((pdata->volt_max / 20) << 8);
-    max77658_write_reg(ctx, MAX1726X_VALRTTH_REG, val);
+    max77658_write_reg(ctx, VALRTTH_REG, val);
 
     /* Set TAlrtTh */
     val = pdata->temp_min & 0xFF;
     val |= ((pdata->temp_max & 0xFF) << 8);
-    max77658_write_reg(ctx, MAX1726X_TALRTTH_REG, val);
+    max77658_write_reg(ctx, TALRTTH_REG, val);
 
     /* Set SAlrtTh */
     val = pdata->soc_min;
     val |= (pdata->soc_max << 8);
-    max77658_write_reg(ctx, MAX1726X_SALRTTH_REG, val);
+    max77658_write_reg(ctx, SALRTTH_REG, val);
 
     /* Set IAlrtTh */
     val = (pdata->curr_min * pdata->rsense / 400) & 0xFF;
     val |= (((pdata->curr_max * pdata->rsense / 400) & 0xFF) << 8);
-    max77658_write_reg(ctx, MAX1726X_IALRTTH_REG, val);
+    max77658_write_reg(ctx, IALRTTH_REG, val);
 }
 
-static int max1726x_get_temperature(maxdev_ctx_t *ctx, int *temp)
+static int get_temperature(maxdev_ctx_t *ctx, int *temp)
 {
     int ret;
     uint16_t data;
 
-    ret = max77658_read_reg(ctx, MAX1726X_TEMP_REG, &data);
+    ret = max77658_read_reg(ctx, TEMP_REG, &data);
     if (ret < 0)
         return ret;
 
@@ -365,12 +367,12 @@ static int max1726x_get_temperature(maxdev_ctx_t *ctx, int *temp)
     return 0;
 }
 
-static int max1726x_get_temperature_limit(maxdev_ctx_t *ctx, int *temp, int shift)
+static int get_temperature_limit(maxdev_ctx_t *ctx, int *temp, int shift)
 {
     int ret;
     uint16_t data;
 
-    ret = max77658_read_reg(ctx, MAX1726X_TALRTTH_REG, &data);
+    ret = max77658_read_reg(ctx, TALRTTH_REG, &data);
     if (ret < 0)
         return ret;
 
@@ -383,17 +385,17 @@ static int max1726x_get_temperature_limit(maxdev_ctx_t *ctx, int *temp, int shif
     return 0;
 }
 
-static int32_t max77568_initialize_config(maxdev_ctx_t *ctx)
+static int32_t max77568_fg_initialize_config(maxdev_ctx_t *ctx)
 {
    int32_t ret;
    uint16_t reg;
    uint16_t hibcfg;
 
    max77658_version_get(ctx);
-   max77568_POR_status_get(ctx);
-   max77658_flag_polling(ctx,MAX1726X_FSTAT_REG, MAX77658_FSTAT_DNR, 500);
+   max77658_POR_status_get(ctx);
+   max77658_flag_polling(ctx,FSTAT_REG, MAX77658_FSTAT_DNR, 500);
 
-   max77658_read_reg(ctx, MAX1726X_HIBCFG_REG, &hibcfg);    //Store original HibCFG value
+   max77658_read_reg(ctx, HIBCFG_REG, &hibcfg);    //Store original HibCFG value
    max77658_write_reg(ctx, 0x60, 0x90);                     // Exit Hibernate Mode step 1
    max77658_write_reg(ctx, 0xBA, 0x0);                      // Exit Hibernate Mode step 2
    max77658_write_reg(ctx, 0x60, 0x0);                      // Exit Hibernate Mode step 3
@@ -404,19 +406,19 @@ static int32_t max77568_initialize_config(maxdev_ctx_t *ctx)
       case MODEL_LOADING_OPTION1:
       {
          /* Step 2.1: Option 1 EZ Config */
-         ret = max77568_config_option_1(ctx, hibcfg);
+         ret = max77658_config_option_1(ctx, hibcfg);
          break;
       }
       case MODEL_LOADING_OPTION2:
       {
          /* Step 2.2: Option 2 Custom Short INI without OCV Table */
-         ret = max77568_config_option_2(ctx, hibcfg);
+         ret = max77658_config_option_2(ctx, hibcfg);
          break;
       }
       case MODEL_LOADING_OPTION3:
       {
          /* Step 2.3: Option 3 Custom Full INI with OCV Table */
-         ret = max77568_config_option_3(ctx, hibcfg);
+         ret = max77568_fg_config_option_3(ctx, hibcfg);
          break;
       }
       default:
@@ -429,32 +431,32 @@ static int32_t max77568_initialize_config(maxdev_ctx_t *ctx)
    max77658_set_alert_thresholds(ctx);
 
    /* Clear Status.POR */
-   max77658_read_reg(ctx, MAX1726X_STATUS_REG, &reg);
-   max77658_write_verify_reg(ctx, MAX1726X_STATUS_REG, reg & ~MAX77658_STATUS_POR);
+   max77658_read_reg(ctx, STATUS_REG, &reg);
+   max77658_write_verify_reg(ctx, STATUS_REG, reg & ~MAX77658_STATUS_POR);
 
    return ret;
 }
 
-static int max1726x_get_battery_health(maxdev_ctx_t *ctx, int *health)
+static int get_battery_health(maxdev_ctx_t *ctx, int *health)
 {
     int temp, vavg, vbatt, ret;
     uint16_t val;
 
-    ret = max77658_read_reg(ctx, MAX1726X_AVGVCELL_REG, &val);
+    ret = max77658_read_reg(ctx, AVGVCELL_REG, &val);
     if (ret < 0)
         goto health_error;
 
     /* bits [0-3] unused */
-    vavg = max1726x_lsb_to_uvolts(val);
+    vavg = lsb_to_uvolts(val);
     /* Convert to millivolts */
     vavg /= 1000;
 
-    ret = max77658_read_reg(ctx, MAX1726X_VCELL_REG, &val);
+    ret = max77658_read_reg(ctx, VCELL_REG, &val);
     if (ret < 0)
         goto health_error;
 
     /* bits [0-3] unused */
-    vbatt = max1726x_lsb_to_uvolts(val);
+    vbatt = lsb_to_uvolts(val);
     /* Convert to millivolts */
     vbatt /= 1000;
 
@@ -463,12 +465,12 @@ static int max1726x_get_battery_health(maxdev_ctx_t *ctx, int *health)
         goto out;
     }
 
-    if (vbatt > ctx->pdata->volt_max + MAX1726X_VMAX_TOLERANCE) {
+    if (vbatt > ctx->pdata->volt_max + VMAX_TOLERANCE) {
         *health = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
         goto out;
     }
 
-    ret = max1726x_get_temperature(ctx, &temp);
+    ret = get_temperature(ctx, &temp);
     if (ret < 0)
         goto health_error;
 
@@ -491,11 +493,11 @@ health_error:
     return ret;
 }
 
-static int max1726x_get_property(maxdev_ctx_t *ctx,
+static int get_property(maxdev_ctx_t *ctx,
                    enum power_supply_property psp,
                    union power_supply_prop_val *val)
 {
-   struct max1726x_platform_data *pdata = ctx->pdata;
+   platform_data *pdata = ctx->pdata;
    uint16_t reg;
    int ret;
 
@@ -503,10 +505,10 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
    {
       case POWER_SUPPLY_PROP_PRESENT:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_STATUS_REG, &reg);
+         ret = max77658_read_reg(ctx, STATUS_REG, &reg);
          if (ret < 0)
          return ret;
-         if (reg & MAX1726X_STATUS_BST)
+         if (reg & STATUS_BST)
          val->intval = 0;
          else
          val->intval = 1;
@@ -514,7 +516,7 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_CYCLE_COUNT:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_CYCLES_REG, &reg);
+         ret = max77658_read_reg(ctx, CYCLES_REG, &reg);
          if (ret < 0)
          return ret;
 
@@ -523,7 +525,7 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_VOLTAGE_MAX:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_MAXMINVOLT_REG, &reg);
+         ret = max77658_read_reg(ctx, MAXMINVOLT_REG, &reg);
          if (ret < 0)
          return ret;
 
@@ -533,7 +535,7 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_VEMPTY_REG, &reg);
+         ret = max77658_read_reg(ctx, VEMPTY_REG, &reg);
          if (ret < 0)
          return ret;
 
@@ -551,34 +553,34 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_VOLTAGE_NOW:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_VCELL_REG, &reg);
+         ret = max77658_read_reg(ctx, VCELL_REG, &reg);
          if (ret < 0)
          return ret;
 
-         val->intval = max1726x_lsb_to_uvolts(reg);
+         val->intval = lsb_to_uvolts(reg);
          break;
       }
       case POWER_SUPPLY_PROP_VOLTAGE_AVG:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_AVGVCELL_REG, &reg);
+         ret = max77658_read_reg(ctx, AVGVCELL_REG, &reg);
          if (ret < 0)
          return ret;
 
-         val->intval = max1726x_lsb_to_uvolts(reg);
+         val->intval = lsb_to_uvolts(reg);
          break;
       }
       case POWER_SUPPLY_PROP_VOLTAGE_OCV:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_OCV_REG, &reg);
+         ret = max77658_read_reg(ctx, OCV_REG, &reg);
          if (ret < 0)
          return ret;
 
-         val->intval = max1726x_lsb_to_uvolts(reg);
+         val->intval = lsb_to_uvolts(reg);
          break;
       }
       case POWER_SUPPLY_PROP_CAPACITY:
       {
-         ret = max77658_read_reg(ctx,MAX1726X_REPSOC_REG, &reg);
+         ret = max77658_read_reg(ctx,REPSOC_REG, &reg);
          if (ret < 0)
          return ret;
 
@@ -587,7 +589,7 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_CHARGE_FULL:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_FULLCAPREP_REG, &reg);
+         ret = max77658_read_reg(ctx, FULLCAPREP_REG, &reg);
          if (ret < 0)
          return ret;
 
@@ -596,7 +598,7 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_CHARGE_COUNTER:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_QH_REG, &reg);
+         ret = max77658_read_reg(ctx, QH_REG, &reg);
          if (ret < 0)
          return ret;
 
@@ -605,7 +607,7 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_CHARGE_NOW:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_REPCAP_REG, &reg);
+         ret = max77658_read_reg(ctx, REPCAP_REG, &reg);
          if (ret < 0)
          return ret;
 
@@ -614,7 +616,7 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_TEMP:
       {
-         ret = max1726x_get_temperature(ctx, &val->intval);
+         ret = get_temperature(ctx, &val->intval);
          if (ret < 0)
          return ret;
 
@@ -623,7 +625,7 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
       {
-         ret = max1726x_get_temperature_limit(ctx, &val->intval, MIN_TEMP_ALERT);
+         ret = get_temperature_limit(ctx, &val->intval, MIN_TEMP_ALERT);
          if (ret < 0)
          return ret;
 
@@ -632,7 +634,7 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
       {
-         ret = max1726x_get_temperature_limit(ctx, &val->intval, MAX_TEMP_ALERT);
+         ret = get_temperature_limit(ctx, &val->intval, MAX_TEMP_ALERT);
          if (ret < 0)
          return ret;
 
@@ -641,30 +643,30 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_HEALTH:
       {
-         ret = max1726x_get_battery_health(ctx, &val->intval);
+         ret = get_battery_health(ctx, &val->intval);
          if (ret < 0)
          return ret;
          break;
          case POWER_SUPPLY_PROP_CURRENT_NOW:
-         ret = max77658_read_reg(ctx, MAX1726X_CURRENT_REG, &reg);
+         ret = max77658_read_reg(ctx, CURRENT_REG, &reg);
          if (ret < 0)
          return ret;
 
-         val->intval = max1726x_raw_current_to_uamps(ctx, reg);
+         val->intval = raw_current_to_uamps(ctx, reg);
          break;
       }
       case POWER_SUPPLY_PROP_CURRENT_AVG:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_AVGCURRENT_REG, &reg);
+         ret = max77658_read_reg(ctx, AVGCURRENT_REG, &reg);
          if (ret < 0)
          return ret;
 
-         val->intval = max1726x_raw_current_to_uamps(ctx, reg);
+         val->intval = raw_current_to_uamps(ctx, reg);
          break;
       }
       case POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_TTE_REG, &reg);
+         ret = max77658_read_reg(ctx, TTE_REG, &reg);
          if (ret < 0)
          return ret;
 
@@ -673,7 +675,7 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
       }
       case POWER_SUPPLY_PROP_TIME_TO_FULL_NOW:
       {
-         ret = max77658_read_reg(ctx, MAX1726X_TTF_REG, &reg);
+         ret = max77658_read_reg(ctx, TTF_REG, &reg);
          if (ret < 0)
          return ret;
 
@@ -687,4 +689,123 @@ static int max1726x_get_property(maxdev_ctx_t *ctx,
    }
    return 0;
 }
+
+
+/**
+ * @brief        Save Learned Parameters Function for battery Fuel Gauge model.
+ * @par          Details
+ *               It is recommended to save the learned capacity parameters every
+ *               time bit 2 of the Cycles register toggles
+ *               (so that it is saved every 64% change in the battery)
+ *               so that if power is lost the values can easily be restored. Make sure
+ *               the data is saved on a non-volatile memory. Call this function after first initialization for reference in future function calls.
+ *               Max number of cycles is 655.35 cycles with a LSB of 1% for the cycles register.
+ *
+ * @param[in]   FG_params Fuel Gauge Parameters based on design details.
+ *
+ * @retval      0 for success
+ * @retval      non-0 negative for errors
+ */
+static int max77658_fg_save_Params(maxdev_ctx_t *ctx, saved_FG_params_t FG_params)
+{
+    int ret;
+    uint16_t data[5], value;
+    ///STEP 1. Checks if the cycle register bit 2 has changed.
+    ret = max77658_read_reg(ctx, CYCLES_REG, &data[3]);
+    value = data[3];
+    if (ret < 0)
+        return ret;
+    //Check if the stored cycles value is different from the read Cycles_reg value
+    else if (FG_params.cycles == value)
+        return ret; //exits the function without saving, when initializing or value did not change (calculate when the function is called in you application).
+    else {
+        value = FG_params.cycles^value;
+        //check with mask
+        value = (value & MAX17055_POR_MASK);
+
+        if (value == 0)
+            return ret;
+
+        ///STEP 2. Save the capacity parameters for the specific battery.
+        ret = max77658_read_reg(ctx, RCOMP0_REG, &data[0]);
+        if (ret < 0)
+            return ret;
+        else
+            FG_params.rcomp0 = data[0];
+
+        ret = max77658_read_reg(ctx, TEMPCO_REG, &data[1]);
+        if (ret < 0)
+            return ret;
+        else
+            FG_params.temp_co = data[1];
+
+        ret = max77658_read_reg(ctx, FULLCAPREP_REG, &data[2]);
+        if (ret < 0)
+            return ret;
+        else
+            FG_params.full_cap_rep = data[2];
+
+        FG_params.cycles = data[3];
+
+        ret = max77658_read_reg(ctx, FULLCAPNOM_REG, &data[4]);
+        if (ret < 0)
+            return ret;
+        else
+            FG_params.full_cap_nom = data[4];
+        return ret;
+    }
+}
+
+/**
+ * @brief        Restore Parameters Function for battery Fuel Gauge model.
+ * @par          Details
+ *               If power is lost, then the capacity information
+ *               can be easily restored with this function.
+ *
+ * @param[in]   FG_params Struct for Fuel Gauge Parameters
+ * @retval      0 for success
+ * @retval      non-0 negative for errors
+ */
+static int max77658_restore_Params(maxdev_ctx_t *ctx, saved_FG_params_t FG_params)
+{
+    int ret;
+    uint16_t temp_data, fullcapnom_data, mixCap_calc, dQacc_calc;
+    uint16_t dPacc_value = 0x0C80;//Set it to 200%
+
+    ///STEP 1. Restoring capacity parameters
+    max77658_write_verify_reg(ctx, RCOMP0_REG, FG_params.rcomp0);
+    max77658_write_verify_reg(ctx, TEMPCO_REG, FG_params.temp_co);
+    max77658_write_verify_reg(ctx, FULLCAPNOM_REG, FG_params.full_cap_nom);
+
+    bsp_delay_ms(350);//check the type of wait
+
+    ///STEP 2. Restore FullCap
+    ret = max77658_read_reg(ctx, FULLCAPNOM_REG, &fullcapnom_data);
+    if (ret < 0)
+        return ret;
+
+    ret = max77658_read_reg(ctx, MIXSOC_REG, &temp_data);
+    if (ret < 0)
+        return ret;
+
+    mixCap_calc = (temp_data*fullcapnom_data)/25600;
+
+    max77658_write_verify_reg(ctx, MIXCAP_REG, mixCap_calc);
+    max77658_write_verify_reg(ctx, FULLCAPREP_REG, FG_params.full_cap_rep);
+
+    ///STEP 3. Write DQACC to 200% of Capacity and DPACC to 200%
+    dQacc_calc = (FG_params.full_cap_nom/ 16) ;
+
+    max77658_write_verify_reg(ctx, DPACC_REG, dPacc_value);
+    max77658_write_verify_reg(ctx, DQACC_REG, dQacc_calc);
+
+    bsp_delay_ms(350);
+
+    ///STEP 4. Restore Cycles register
+    ret = max77658_write_verify_reg(ctx, CYCLES_REG, FG_params.cycles);
+    if (ret < 0)
+        return ret;
+    return ret;
+}
+
 

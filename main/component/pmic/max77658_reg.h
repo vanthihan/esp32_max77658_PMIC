@@ -11,7 +11,7 @@
 /* Includes ----------------------------------------------------------- */
 #include <stdint.h>
 #include "max77658_defines.h"
-#include "max77658_types.h"
+#include "max77658_fg_types.h"
 
 /* Public defines ----------------------------------------------------- */
 
@@ -37,17 +37,17 @@ typedef struct
    uint8_t device_address;
    dev_read_ptr   read_reg;
    dev_write_ptr  write_reg;
-   struct max1726x_platform_data *pdata;
+   platform_data *pdata;
 }maxdev_ctx_t;
 
 /*
  * Helper function Read generic device register
  */
-int32_t max77658_read_reg(maxdev_ctx_t *ctx, uint8_t reg, uint16_t *val);
+int32_t max77658_read_reg(maxdev_ctx_t *ctx, uint8_t reg_addr, uint16_t *value);
 /*
  * Helper function write generic device register
  */
-int32_t max77658_write_reg(maxdev_ctx_t *ctx, uint8_t reg, uint16_t data);
+int32_t max77658_write_reg(maxdev_ctx_t *ctx, uint8_t reg_addr, uint16_t reg_data);
 
 
 #endif /* MAIN_COMPONENT_PMIC_MAX77658_REG_H_ */
