@@ -13,6 +13,8 @@
 
 /* Private enumerate/structure ---------------------------------------- */
 /* Private macros ----------------------------------------------------- */
+#define SUCCESS   0
+#define ERROR     -1
 /* Public variables --------------------------------------------------- */
 /* Private variables -------------------------------------------------- */
 static const char *TAG = "MAX77658 PM";
@@ -68,7 +70,7 @@ int32_t max77658_pm_write_reg(max77658_pm_t *ctx, uint8_t reg, uint8_t *data)
  */
 int32_t max77658_pm_get_DIDM(max77658_pm_t *ctx)
 {
-   int32_t ret = false;
+   int32_t ret;
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77650_STAT_GLBL_ADDR, &data);
@@ -608,7 +610,7 @@ int32_t max77658_pm_get_P_LED1(max77658_pm_t *ctx)
  * @retval          LED1 On Duty-Cycle Settings
  *
  */
-uint8_t max77658_pm_get_D_LED1(max77658_pm_t *ctx)
+int32_t max77658_pm_get_D_LED1(max77658_pm_t *ctx)
 {
    int32_t ret;
    uint8_t data;
@@ -860,754 +862,2534 @@ int32_t max77658_pm_get_SFT_RST(max77658_pm_t *ctx)
  * @retval          Interrupt Status Register 0x00
  *
  */
-int32_t max77658_pm_get_INT_GLBL(max77658_pm_t *ctx){ //Returns
-  return max77658_pm_read_reg(ctx, MAX77650_INT_GLBL_ADDR);
+int32_t max77658_pm_get_INT_GLBL(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_INT_GLBL_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data;
+   }
+
+   return ret;
 }
 
-uint8_t MAX77650_getINT_M_GLBL(max77658_pm_t *ctx){ //Returns Global Interrupt Mask Register
-   return (max77658_pm_read_reg(ctx, MAX77650_INTM_GLBL_ADDR) & 0b01111111);
+/**
+ * @brief  Global Interrupt Mask Register.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          Interrupt Status Register 0x00
+ *
+ */
+int32_t max77658_pm_get_INT_M_GLBL(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_INTM_GLBL_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data & 0b01111111);
+   }
+
+   return ret;
 }
 
-int32_t MAX77650_getDBEN_GPI(max77658_pm_t *ctx){ //Returns General Purpose Input Debounce Timer Enable
-   return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR) >> 4) & 0b00000001);
+/**
+ * @brief  General Purpose Input Debounce Timer Enable.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          Interrupt Status Register 0x00
+ *
+ */
+int32_t max77658_pm_get_DBEN_GPI(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 4) & 0b00000001;
+   }
+
+   return ret;
 }
-int32_t MAX77650_getDO(max77658_pm_t *ctx){ //Returns General Purpose Output Data Output
-   return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR) >> 3) & 0b00000001);
+
+/**
+ * @brief  General Purpose Output Data Output.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: General Purpose Output Data Output
+ *
+ */
+int32_t max77658_pm_get_DO(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 3) & 0b00000001;
+   }
+
+   return ret;
 }
-int32_t MAX77650_getDRV(max77658_pm_t *ctx){ //Returns General Purpose Output Driver Type
-   return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR) >> 2) & 0b00000001);
+
+/**
+ * @brief  General Purpose Output Driver Type.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: General Purpose Output Driver Type
+ *
+ */
+int32_t max77658_pm_get_DRV(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 2) & 0b00000001;
+   }
+
+   return ret;
 }
-int32_t MAX77650_getDI(max77658_pm_t *ctx){ //Returns GPIO Digital Input Value
-   return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR) >> 1) & 0b00000001);
+
+/**
+ * @brief  GPIO Digital Input Value.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: GPIO Digital Input Value
+ *
+ */
+int32_t max77658_pm_get_DI(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 1) & 0b00000001;
+   }
+
+   return ret;
 }
-int32_t MAX77650_getDIR(max77658_pm_t *ctx){ //Returns GPIO Direction
-   return (max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR) & 0b00000001);
+
+/**
+ * @brief  GPIO Direction.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: GPIO Direction
+ *
+ */
+int32_t max77658_pm_get_DIR(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data & 0b00000001);
+   }
+
+   return ret;
 }
 
 //Charger Interrupt Status Register 0x01
-uint8_t MAX77650_getINT_CHG(max77658_pm_t *ctx){ //Returns Charger Interrupt Status Register 0x01
- return max77658_pm_read_reg(ctx, MAX77650_INT_CHG_ADDR);
+/**
+ * @brief  Charger Interrupt Status Register 0x01.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: Charger Interrupt Status Register 0x01
+ *
+ */
+int32_t max77658_pm_get_INT_CHG(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_INT_CHG_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data;
+   }
+
+   return ret;
 }
 
 //Charger Interrupt Mask Register 0x07
-uint8_t MAX77650_getINT_M_CHG(max77658_pm_t *ctx){ //Returns Global Interrupt Mask Register
-   return (max77658_pm_read_reg(ctx, MAX77650_INT_M_CHG_ADDR) & 0b01111111);
+/**
+ * @brief  Global Interrupt Mask Register.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: Global Interrupt Mask Register
+ *
+ */
+int32_t max77658_pm_get_INT_M_CHG(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_INT_M_CHG_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b01111111;
+   }
+
+   return ret; 
 }
 
 //Charger Configuration Register A 0x18
-uint8_t MAX77650_getTHM_HOT(max77658_pm_t *ctx){ //Returns the VHOT JEITA Temperature Threshold
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR) >> 6) & 0b00000011);
+/**
+ * @brief  VHOT JEITA Temperature Threshold.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: VHOT JEITA Temperature Threshold
+ *
+ */
+int32_t max77658_pm_get_THM_HOT(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 6) & 0b00000011;
+   }
+
+   return ret; 
 }
-uint8_t MAX77650_getTHM_WARM(max77658_pm_t *ctx){ //Returns the VWARM JEITA Temperature Threshold
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR) >> 4) & 0b00000011);
+
+/**
+ * @brief  VWARM JEITA Temperature Threshold.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: Global Interrupt Mask Register
+ *
+ */
+int32_t max77658_pm_get_THM_WARM(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 4) & 0b00000011;
+   }
+
+   return ret; 
 }
-uint8_t MAX77650_getTHM_COOL(max77658_pm_t *ctx){ //Returns the VCOOL JEITA Temperature Threshold
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR) >> 2) & 0b00000011);
+
+/**
+ * @brief  VCOOL JEITA Temperature Threshold.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: VCOOL JEITA Temperature Threshold
+ *
+ */
+int32_t max77658_pm_get_THM_COOL(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 2) & 0b00000011;
+   }
+
+   return ret; 
 }
-uint8_t MAX77650_getTHM_COLD(max77658_pm_t *ctx){ //Returns the VCOLD JEITA Temperature Threshold
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR) & 0b00000011);
+
+/**
+ * @brief  VCOLD JEITA Temperature Threshold.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: VCOLD JEITA Temperature Threshold
+ *
+ */
+int32_t max77658_pm_get_THM_COLD(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00000011;
+   }
+
+   return ret; 
 }
 
 //Charger Configuration Register B 0x19
-uint8_t MAX77650_getVCHGIN_MIN(max77658_pm_t *ctx){ //Returns the Minimum CHGIN regulation voltage (VCHGIN-MIN)
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR) >> 5) & 0b00000111);
+/**
+ * @brief  Minimum CHGIN regulation voltage (VCHGIN-MIN).[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: VCHGIN-MIN
+ *
+ */
+int32_t max77658_pm_get_VCHGIN_MIN(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 5) & 0b00000111;
+   }
+
+   return ret; 
 }
-uint8_t MAX77650_getICHGIN_LIM(max77658_pm_t *ctx){ //Returns the CHGIN Input Current Limit (ICHGIN-LIM)
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR) >> 2) & 0b00000111);
+
+/**
+ * @brief  CHGIN Input Current Limit (ICHGIN-LIM).[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: CHGIN Input Current Limit (ICHGIN-LIM)
+ *
+ */
+int32_t max77658_pm_get_ICHGIN_LIM(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 2) & 0b00000111;
+   }
+
+   return ret; 
 }
-int32_t MAX77650_getI_PQ(max77658_pm_t *ctx){ //Returns the prequalification charge current (IPQ) as a percentage of IFAST-CHG
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR) >> 1) & 0b00000001);
+
+/**
+ * @brief  prequalification charge current (IPQ) as a percentage of IFAST-CHG.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: percentage of IFAST-CHG
+ *
+ */
+int32_t max77658_pm_get_I_PQ(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 1) & 0b00000001;
+   }
+
+   return ret;
 }
-int32_t MAX77650_getCHG_EN(max77658_pm_t *ctx){ //Returns Charger Enable
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR) & 0b00000001);
+
+/**
+ * @brief  Charger Enable.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: Charger Enable
+ *
+ */
+int32_t max77658_pm_get_CHG_EN(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00000001;
+   }
+
+   return ret;
 }
 
 //Charger Configuration Register C 0x1A
-uint8_t MAX77650_getCHG_PQ(max77658_pm_t *ctx){ //Returns the Battery prequalification voltage threshold (VPQ)
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR) >> 5) & 0b00000111);
+/**
+ * @brief  Battery prequalification voltage threshold (VPQ).[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: Battery prequalification voltage threshold (VPQ)
+ *
+ */
+int32_t max77658_pm_get_CHG_PQ(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 5) & 0b00000111;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getI_TERM(max77658_pm_t *ctx){ //Returns the Charger Termination Current (ITERM). I_TERM[1:0] sets the charger termination current as a percentage of the fast charge current IFAST-CHG.
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR) >> 3) & 0b00000011);
+
+/**
+ * @brief  Charger Termination Current (ITERM). I_TERM[1:0] sets the charger termination current 
+ *                      as a percentage of the fast charge current IFAST-CHG.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error: percentage of the fast charge current IFAST-CHG
+ *
+ */
+int32_t max77658_pm_get_I_TERM(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 3) & 0b00000011;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getT_TOPOFF(max77658_pm_t *ctx){ //Returns the Topoff timer value (tTO)
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR) & 0b00000111);
+
+/**
+ * @brief  Topoff timer value (tTO).[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Topoff timer value (tTO)
+ *
+ */
+int32_t max77658_pm_get_T_TOPOFF(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00000111;
+   }
+
+   return ret;
 }
 
 //Charger Configuration Register D 0x1B
-uint8_t MAX77650_getTJ_REG(max77658_pm_t *ctx){ //Returns the die junction temperature regulation point, TJ-REG
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR) >> 5) & 0b00000111);
+/**
+ * @brief  the die junction temperature regulation point, TJ-REG.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: the die junction temperature regulation point, TJ-REG
+ *
+ */
+int32_t max77658_pm_get_TJ_REG(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 5) & 0b00000111;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getVSYS_REG(max77658_pm_t *ctx){ //Returns the System voltage regulation (VSYS-REG)
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR) & 0b00011111);
+
+/**
+ * @brief  System voltage regulation (VSYS-REG).[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: System voltage regulation (VSYS-REG)
+ *
+ */
+int32_t max77658_pm_get_VSYS_REG(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00011111;
+   }
+
+   return ret;
 }
 
 //Charger Configuration Register E 0x1C
-uint8_t MAX77650_getCHG_CC(max77658_pm_t *ctx){ //Returns the fast-charge constant current value, IFAST-CHG.
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR) >> 2) & 0b00111111);
+/**
+ * @brief  fast-charge constant current value, IFAST-CHG.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: fast-charge constant current value, IFAST-CHG
+ *
+ */
+int32_t max77658_pm_get_CHG_CC(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 2) & 0b00111111;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getT_FAST_CHG(max77658_pm_t *ctx){ //Returns the fast-charge safety timer, tFC.
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR) & 0b00000011);
+
+/**
+ * @brief  the fast-charge safety timer, tFC.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: the fast-charge safety timer, tFC.
+ */
+int32_t max77658_pm_get_T_FAST_CHG(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00000011;
+   }
+
+   return ret;
 }
 
 //Charger Configuration Register F 0x1D
-uint8_t MAX77650_getCHG_CC_JEITA(max77658_pm_t *ctx){ //Returns the IFAST-CHG_JEITA for when the battery is either cool or warm as defined by the TCOOL and TWARM temperature thresholds. This register is a don't care if the battery temperature is normal.
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR) >> 2) & 0b00111111);
+/**
+ * @brief  Returns the IFAST-CHG_JEITA for when the battery is either cool or warm 
+ *     as defined by the TCOOL and TWARM temperature thresholds. 
+ *     This register is a don't care if the battery temperature is normal.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: 
+ */
+int32_t max77658_pm_get_CHG_CC_JEITA(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 2) & 0b00111111;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getTHM_EN(max77658_pm_t *ctx){ //Returns the Thermistor enable bit
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR) >> 1) & 0b00000001);
+
+/**
+ * @brief  Returns the Thermistor enable bit.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the Thermistor enable bit
+ */
+int32_t max77658_pm_get_THM_EN(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 1) & 0b00000001;
+   }
+
+   return ret;
 }
 
 //Charger Configuration Register G 0x1E
-uint8_t MAX77650_getCHG_CV(max77658_pm_t *ctx){ //Returns the fast-charge battery regulation voltage, VFAST-CHG.
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR) >> 2) & 0b00111111);
+/**
+ * @brief  Returns the fast-charge battery regulation voltage, VFAST-CHG.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the fast-charge battery regulation voltage, VFAST-CHG.
+ */
+int32_t max77658_pm_get_CHG_CV(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 2) & 0b00111111;
+   }
+
+   return ret;
 }
-int32_t MAX77650_getUSBS(max77658_pm_t *ctx){ //this bit places CHGIN in USB suspend mode
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR) >> 1) & 0b00000001);
+
+/**
+ * @brief  this bit places CHGIN in USB suspend mode.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: this bit places CHGIN in USB suspend mode
+ */
+int32_t max77658_pm_get_USBS(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 1) & 0b00000001;
+   }
+
+   return ret;
 }
 
 //Charger Configuration Register H 0x1F
-uint8_t MAX77650_getCHG_CV_JEITA(max77658_pm_t *ctx){ //Returns the modified VFAST-CHG for when the battery is either cool or warm as defined by the TCOOL and TWARM temperature thresholds. This register is a don't care if the battery temperature is normal.
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_H_ADDR) >> 2) & 0b00111111);
+/**
+ * @brief  Returns the modified VFAST-CHG for when the battery is either 
+ *    cool or warm as defined by the TCOOL and TWARM temperature thresholds.
+ *    This register is a don't care if the battery temperature is normal.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: 
+ */
+int32_t max77658_pm_get_CHG_CV_JEITA(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_H_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 2) & 0b00111111;
+   }
+
+   return ret;
 }
 
 //Charger Configuration Register I 0x20
-uint8_t MAX77650_getIMON_DISCHG_SCALE(max77658_pm_t *ctx){ //Returns the Selects the battery discharge current full-scale current value This 4-bit configuration starts at 7.5mA and ends at 300mA.
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR) >> 4) & 0b00001111);
+/**
+ * @brief  Returns the Selects the battery discharge current
+ *       full-scale current value. This 4-bit configuration
+ *       starts at 7.5mA and ends at 300mA.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: battery discharge current full-scale current value
+ */
+int32_t max77658_pm_get_IMON_DISCHG_SCALE(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 4) & 0b00001111;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getMUX_SEL(max77658_pm_t *ctx){ //Returns the analog channel to connect to AMUX configuration
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR) & 0b00001111);
+
+/**
+ * @brief  Returns the analog channel to connect to AMUX configuration.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the analog channel to connect to AMUX configuration
+ */
+int32_t max77658_pm_get_MUX_SEL(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00001111;
+   }
+
+   return ret;
 }
 
 //LDO Configuration Register A 0x38
-uint8_t MAX77650_getTV_LDO(max77658_pm_t *ctx){ //Returns the LDO Target Output Voltage
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_A_ADDR) & 0b01111111);
+/**
+ * @brief  Returns the LDO Target Output Voltage.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the LDO Target Output Voltage
+ */
+int32_t max77658_pm_get_TV_LDO(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b01111111;
+   }
+
+   return ret;
 }
 
 //LDO Configuration Register B 0x39
-int32_t MAX77650_getADE_LDO(max77658_pm_t *ctx){ //Returns LDO active-Discharge Enable
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR) >> 3) & 0b00000001);
+/**
+ * @brief  Returns LDO active-Discharge Enable.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns LDO active-Discharge Enable
+ */
+int32_t max77658_pm_get_ADE_LDO(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 3) & 0b00000001;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getEN_LDO(max77658_pm_t *ctx){ //Enable Control for LDO.
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR) & 0b00000111);
+
+/**
+ * @brief  Enable Control for LDO.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Enable Control for LDO.
+ */
+int32_t max77658_pm_get_EN_LDO(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00000111;
+   }
+
+   return ret;
 }
 
 //SIMO Buck-Boost Global Configuration Register 0x28
-int32_t MAX77650_getMRT_OTP(max77658_pm_t *ctx){ //Returns Manual Reset Time Configuration
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR) >> 6) & 0b00000001);
+/**
+ * @brief  Returns Manual Reset Time Configuration.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns Manual Reset Time Configuration
+ */
+int32_t max77658_pm_get_MRT_OTP(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 6) & 0b00000001;
+   }
+
+   return ret;
 }
-int32_t MAX77650_getSBIA_LPM_DEF(max77658_pm_t *ctx){ //Returns Default voltage of the SBIA_LPM bit
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR) >> 5) & 0b00000001);
+
+/**
+ * @brief  Returns Default voltage of the SBIA_LPM bit.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns Default voltage of the SBIA_LPM bit
+ */
+int32_t max77658_pm_get_SBIA_LPM_DEF(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 5) & 0b00000001;
+   }
+
+   return ret;
 }
-int32_t MAX77650_getDBNC_nEN_DEF(max77658_pm_t *ctx){ //Returns Default Value of the DBNC_nEN bit
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR) >> 4) & 0b00000001);
+
+/**
+ * @brief  Returns Default Value of the DBNC_nEN bit.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns Default Value of the DBNC_nEN bit
+ */
+int32_t max77658_pm_get_DBNC_nEN_DEF(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 4) & 0b00000001;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getDRV_SBB(max77658_pm_t *ctx){ //Returns the SIMO Buck-Boost (all channels) Drive Strength Trim.
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR) & 0b00000011);
+
+/**
+ * @brief  Returns the SIMO Buck-Boost (all channels) Drive Strength Trim.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the SIMO Buck-Boost (all channels) Drive Strength Trim.
+ */
+int32_t max77658_pm_get_DRV_SBB(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00000011;
+   }
+
+   return ret;
 }
 
 //SIMO Buck-Boost 0 Configuration Register A 0x29
-uint8_t MAX77650_getIP_SBB0(max77658_pm_t *ctx){ //Returns the SIMO Buck-Boost Channel 1 Peak Current Limit
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR) >> 6) & 0b00000011);
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 1 Peak Current Limit.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the SIMO Buck-Boost Channel 1 Peak Current Limit
+ */
+int32_t max77658_pm_get_IP_SBB0(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 6) & 0b00000011;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getTV_SBB0(max77658_pm_t *ctx){ //Returns the SIMO Buck-Boost Channel 0 Target Output Voltage
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR) & 0b00111111);
+
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 0 Target Output Voltage.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the SIMO Buck-Boost Channel 0 Target Output Voltage
+ */
+int32_t max77658_pm_get_TV_SBB0(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00111111;
+   }
+
+   return ret;
 }
 
 //SIMO Buck-Boost 0 Configuration Register B 0x2A
-int32_t MAX77650_getADE_SBB0(max77658_pm_t *ctx){ //Returns SIMO Buck-Boost Channel 0 Active-Discharge Enable
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR) >> 3) & 0b00000001);
+/**
+ * @brief  Returns SIMO Buck-Boost Channel 0 Active-Discharge Enable.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns SIMO Buck-Boost Channel 0 Active-Discharge Enable
+ */
+int32_t max77658_pm_get_ADE_SBB0(max77658_pm_t *ctx){ //
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 3) & 0b00000001;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getEN_SBB0(max77658_pm_t *ctx){ //Returns the Enable Control for SIMO Buck-Boost Channel 0.
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR) & 0b00000111);
+
+/**
+ * @brief  Returns the Enable Control for SIMO Buck-Boost Channel 0.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the Enable Control for SIMO Buck-Boost Channel 0.
+ */
+int32_t max77658_pm_get_EN_SBB0(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00000111;
+   }
+
+   return ret;
 }
 
 //SIMO Buck-Boost 1 Configuration Register A 0x2B
-uint8_t MAX77650_getIP_SBB1(max77658_pm_t *ctx){ //Returns the SIMO Buck-Boost Channel 1 Peak Current Limit
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR) >> 6) & 0b00000011);
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 1 Peak Current Limit.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the SIMO Buck-Boost Channel 1 Peak Current Limit
+ */
+int32_t max77658_pm_get_IP_SBB1(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 6) & 0b00000011;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getTV_SBB1(max77658_pm_t *ctx){ //Returns the SIMO Buck-Boost Channel 1 Target Output Voltage
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR) & 0b00111111);
+
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 1 Target Output Voltage.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the SIMO Buck-Boost Channel 1 Target Output Voltage
+ */
+int32_t max77658_pm_get_TV_SBB1(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00111111;
+   }
+
+   return ret;
 }
 
 //SIMO Buck-Boost 1 Configuration Register B 0x2C
-int32_t MAX77650_getADE_SBB1(max77658_pm_t *ctx){ //Returns SIMO Buck-Boost Channel 1 Active-Discharge Enable
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR) >> 3) & 0b00000001);
+/**
+ * @brief  Returns SIMO Buck-Boost Channel 1 Active-Discharge Enable.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns SIMO Buck-Boost Channel 1 Active-Discharge Enable
+ */
+int32_t max77658_pm_get_ADE_SBB1(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 3) & 0b00000001;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getEN_SBB1(max77658_pm_t *ctx){ //Returns the Enable Control for SIMO Buck-Boost Channel 1.
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR) & 0b00000111);
+
+/**
+ * @brief  Returns the Enable Control for SIMO Buck-Boost Channel 1.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the Enable Control for SIMO Buck-Boost Channel 1.
+ */
+int32_t max77658_pm_get_EN_SBB1(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00000111;
+   }
+
+   return ret;
 }
 
 //SIMO Buck-Boost 2 Configuration Register A 0x2D
-uint8_t MAX77650_getIP_SBB2(max77658_pm_t *ctx){ //Returns the SIMO Buck-Boost Channel 2 Peak Current Limit
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR) >> 6) & 0b00000011);
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 2 Peak Current Limit.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the SIMO Buck-Boost Channel 2 Peak Current Limit
+ */
+int32_t max77658_pm_get_IP_SBB2(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 6) & 0b00000011;
+   }
+
+   return ret;
 }
-uint8_t MAX77650_getTV_SBB2(max77658_pm_t *ctx){ //Returns the SIMO Buck-Boost Channel 2 Target Output Voltage
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR) & 0b00111111);
+
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 2 Target Output Voltage.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the SIMO Buck-Boost Channel 2 Target Output Voltage
+ */
+int32_t max77658_pm_get_TV_SBB2(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data& 0b00111111;
+   }
+
+   return ret;
 }
 
 //SIMO Buck-Boost 2 Configuration Register B 0x2E
-int32_t MAX77650_getADE_SBB2(max77658_pm_t *ctx){ //Returns SIMO Buck-Boost Channel 2 Active-Discharge Enable
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR) >> 3) & 0b00000001);
-}
-uint8_t MAX77650_getEN_SBB2(max77658_pm_t *ctx){ //Returns the Enable Control for SIMO Buck-Boost Channel 2.
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR) & 0b00000111);
+/**
+ * @brief  Returns SIMO Buck-Boost Channel 2 Active-Discharge Enable.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns SIMO Buck-Boost Channel 2 Active-Discharge Enable
+ */
+int32_t max77658_pm_get_ADE_SBB2(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 3) & 0b00000001;
+   }
+
+   return ret;
 }
 
-int32_t MAX77650_getCLK_64_S(max77658_pm_t *ctx){ //Returns 64Hz Clock Status
-  return ((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR) >> 1) & 0b00000001);
+/**
+ * @brief  Returns the Enable Control for SIMO Buck-Boost Channel 2.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the Enable Control for SIMO Buck-Boost Channel 2.
+ */
+int32_t max77658_pm_get_EN_SBB2(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00000111;
+   }
+
+   return ret;
 }
-int32_t MAX77650_getEN_LED_MSTR(max77658_pm_t *ctx){ //Returns Master LED Enable Bit
-  return (max77658_pm_read_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR) & 0b00000001);
+
+/**
+ * @brief  Returns 64Hz Clock Status.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns 64Hz Clock Status
+ */
+int32_t max77658_pm_get_CLK_64_S(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = (data >> 1) & 0b00000001;
+   }
+
+   return ret;
+}
+
+/**
+ * @brief  Returns Master LED Enable Bit.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns Master LED Enable Bit
+ */
+int32_t max77658_pm_get_EN_LED_MSTR(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00000001;
+   }
+
+   return ret;
 }
 
 
 //CID Register
-uint8_t MAX77650_getCID(max77658_pm_t *ctx){ // Returns the OTP programmed Chip Identification Code
-  return (max77658_pm_read_reg(ctx, MAX77650_CID_ADDR) & 0b00001111);
+/**
+ * @brief  RReturns the OTP programmed Chip Identification Code.[get]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. > 0: Returns the OTP programmed Chip Identification Code
+ */
+int32_t max77658_pm_get_CID(max77658_pm_t *ctx)
+{
+   int32_t ret;
+   uint8_t data;
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CID_ADDR, &data);
+   if(ret > 0)
+   {
+      ret = data & 0b00001111;
+   }
+
+   return ret;
 }
 
+/*=======================================================================*/
+/*********************** Register writes *********************************/
+/*=======================================================================*/
 
-//***** Register writes *****
+/**
+ * @brief  Sets the LDO Target Output Voltage.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_TV_LDO(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
 
-int32_t MAX77650_setTV_LDO(uint8_t target_val){ //Sets the LDO Target Output Voltage
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LDO_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_A_ADDR) & 0b10000000) | ((target_val & 0b01111111) << 0)));
-  if(MAX77650_getTV_LDO()==target_val)
-   return true;
-  else
-   return false;
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b10000000) | ((target_val & 0b01111111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LDO_A_ADDR, write_data);
+   ret = (max77658_pm_get_TV_LDO(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //LDO Configuration Register B 0x39
-int32_t MAX77650_setADE_LDO(uint8_t target_val){ //Sets LDO active-Discharge Enable
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LDO_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR) & 0b11110111) | ((target_val & 0b00000001) << 3)));
-  if(MAX77650_getADE_LDO()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Sets LDO active-Discharge Enable.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_ADE_LDO(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, write_data);
+   ret = (max77658_pm_get_ADE_LDO(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
-int32_t MAX77650_setEN_LDO(uint8_t target_val){ //Enable LDO
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LDO_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR) & 0b11111000) | ((target_val & 0b00000111) << 0)));
-  if(MAX77650_getEN_LDO()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Enable LDO.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_EN_LDO(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111000) | ((target_val & 0b00000111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, write_data);
+   ret = (max77658_pm_get_EN_LDO(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Charger Configuration Register A 0x18
-int32_t MAX77650_setTHM_HOT(uint8_t target_val){ //Returns the VHOT JEITA Temperature Threshold
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR) & 0b00111111) | ((target_val & 0b00000011) << 6)));
-  if(MAX77650_getTHM_HOT()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the VHOT JEITA Temperature Threshold.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_THM_HOT(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, write_data);
+   ret = (max77658_pm_get_THM_HOT(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setTHM_WARM(uint8_t target_val){ //Returns the VWARM JEITA Temperature Threshold
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR) & 0b11001111) | ((target_val & 0b00000011) << 4)));
-  if(MAX77650_getTHM_WARM()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the VWARM JEITA Temperature Threshold.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_THM_WARM(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11001111) | ((target_val & 0b00000011) << 4);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, write_data);
+   ret = (max77658_pm_get_THM_WARM(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setTHM_COOL(uint8_t target_val){ //Returns the VCOOL JEITA Temperature Threshold
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR) & 0b11110011) | ((target_val & 0b00000011) << 2)));
-  if(MAX77650_getTHM_COOL()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the VCOOL JEITA Temperature Threshold.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_THM_COOL(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110011) | ((target_val & 0b00000011) << 2);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, write_data);
+   ret = (max77658_pm_get_THM_COOL(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setTHM_COLD(uint8_t target_val){ //Returns the VCOLD JEITA Temperature Threshold
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR) & 0b11111100) | ((target_val & 0b00000011) << 0)));
-  if(MAX77650_getTHM_COLD()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the VCOLD JEITA Temperature Threshold.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_THM_COLD(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111100) | ((target_val & 0b00000011) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, write_data);
+   ret = (max77658_pm_get_THM_COLD(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Charger Configuration Register B 0x19
-int32_t MAX77650_setVCHGIN_MIN(uint8_t target_val){ //Returns the Minimum CHGIN regulation voltage (VCHGIN-MIN)
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR) & 0b00011111) | ((target_val & 0b00000111) << 5)));
-  if(MAX77650_getVCHGIN_MIN()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the Minimum CHGIN regulation voltage (VCHGIN-MIN).[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_VCHGIN_MIN(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00011111) | ((target_val & 0b00000111) << 5);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, write_data);
+   ret = (max77658_pm_get_VCHGIN_MIN(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setICHGIN_LIM(uint8_t target_val){ //Returns the CHGIN Input Current Limit (ICHGIN-LIM)
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR) & 0b11100011) | ((target_val & 0b00000111) << 2)));
-  if(MAX77650_getICHGIN_LIM()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the CHGIN Input Current Limit (ICHGIN-LIM).[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_ICHGIN_LIM(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11100011) | ((target_val & 0b00000111) << 2);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, write_data);
+   ret = (max77658_pm_get_ICHGIN_LIM(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setI_PQ(int32_t target_val){ //Returns the prequalification charge current (IPQ) as a percentage of IFAST-CHG
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR) & 0b11111101) | ((target_val & 0b00000001) << 1)));
-  if(MAX77650_getI_PQ()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the prequalification charge current (IPQ) as a percentage of IFAST-CHG.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_I_PQ(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111101) | ((target_val & 0b00000001) << 1);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, write_data);
+   ret = (max77658_pm_get_I_PQ(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setCHG_EN(int32_t target_val){ //Returns Charger Enable
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR) & 0b11111110) | ((target_val & 0b00000001) << 0)));
-  if(MAX77650_getCHG_EN()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns Charger Enable.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_CHG_EN(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111110) | ((target_val & 0b00000001) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, write_data);
+   ret = (max77658_pm_get_CHG_EN(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Charger Configuration Register C 0x1A
-int32_t MAX77650_setCHG_PQ(uint8_t target_val){ //Returns the Battery prequalification voltage threshold (VPQ)
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_C_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR) & 0b00011111) | ((target_val & 0b00000111) << 5)));
-  if(MAX77650_getCHG_PQ()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the Battery prequalification voltage threshold (VPQ).[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_CHG_PQ(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00011111) | ((target_val & 0b00000111) << 5);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, write_data);
+   ret = (max77658_pm_get_CHG_PQ(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setI_TERM(uint8_t target_val){ //Returns the Charger Termination Current (ITERM). I_TERM[1:0] sets the charger termination current as a percentage of the fast charge current IFAST-CHG.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_C_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR) & 0b11100111) | ((target_val & 0b00000011) << 3)));
-  if(MAX77650_getI_TERM()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the Charger Termination Current (ITERM). I_TERM[1:0] sets 
+ *             the charger termination current as a percentage of 
+ *             the fast charge current IFAST-CHG..[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_I_TERM(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11100111) | ((target_val & 0b00000011) << 3);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, write_data);
+   ret = (max77658_pm_get_I_TERM(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setT_TOPOFF(uint8_t target_val){ //Returns the Topoff timer value (tTO)
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_C_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR) & 0b11111000) | ((target_val & 0b00000111) << 0)));
-  if(MAX77650_getT_TOPOFF()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the Topoff timer value (tTO).[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_T_TOPOFF(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111000) | ((target_val & 0b00000111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, write_data);
+   ret = (max77658_pm_get_T_TOPOFF(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Charger Configuration Register D 0x1B
-int32_t MAX77650_setTJ_REG(uint8_t target_val){ //Returns the die junction temperature regulation point, TJ-REG
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_D_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR) & 0b00011111) | ((target_val & 0b00000111) << 5)));
-  if(MAX77650_getTJ_REG()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the die junction temperature regulation point, TJ-REG.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_TJ_REG(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00011111) | ((target_val & 0b00000111) << 5);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, write_data);
+   ret = (max77658_pm_get_TJ_REG(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setVSYS_REG(uint8_t target_val){ //Returns the System voltage regulation (VSYS-REG)
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_D_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR) & 0b11100000) | ((target_val & 0b00011111) << 0)));
-  if(MAX77650_getVSYS_REG()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the System voltage regulation (VSYS-REG).[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_VSYS_REG(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11100000) | ((target_val & 0b00011111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, write_data);
+   ret = (max77658_pm_get_VSYS_REG(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Charger Configuration Register E 0x1C
-int32_t MAX77650_setCHG_CC(uint8_t target_val){ //Returns the fast-charge constant current value, IFAST-CHG.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_E_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR) & 0b00000011) | ((target_val & 0b00111111) << 2)));
-  if(MAX77650_getCHG_CC()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the fast-charge constant current value, IFAST-CHG.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_CHG_CC(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00000011) | ((target_val & 0b00111111) << 2);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, write_data);
+   ret = (max77658_pm_get_CHG_CC(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setT_FAST_CHG(uint8_t target_val){ //Returns the fast-charge safety timer, tFC.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_E_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR) & 0b11111100) | ((target_val & 0b00000011) << 0)));
-  if(MAX77650_getT_FAST_CHG()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the fast-charge safety timer, tFC.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_T_FAST_CHG(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111100) | ((target_val & 0b00000011) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, write_data);
+   ret = (max77658_pm_get_T_FAST_CHG(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Charger Configuration Register F 0x1D
-int32_t MAX77650_setCHG_CC_JEITA(uint8_t target_val){ //Returns the IFAST-CHG_JEITA for when the battery is either cool or warm as defined by the TCOOL and TWARM temperature thresholds. This register is a don't care if the battery temperature is normal.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_F_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR) & 0b00000011) | ((target_val & 0b00111111) << 2)));
-  if(MAX77650_getCHG_CC_JEITA()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the IFAST-CHG_JEITA for when the battery 
+ * is either cool or warm as defined by the TCOOL and TWARM temperature thresholds.
+ * This register is a don't care if the battery temperature is normal.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_CHG_CC_JEITA(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00000011) | ((target_val & 0b00111111) << 2);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, write_data);
+   ret = (max77658_pm_get_CHG_CC_JEITA(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setTHM_EN(int32_t target_val){ //Returns the Thermistor enable bit
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_F_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR) & 0b11111101) | ((target_val & 0b00000001) << 1)));
-  if(MAX77650_getTHM_EN()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the Thermistor enable bit.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_THM_EN(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111101) | ((target_val & 0b00000001) << 1);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, write_data);
+   ret = (max77658_pm_get_THM_EN(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Charger Configuration Register G 0x1E
-int32_t MAX77650_setCHG_CV(uint8_t target_val){ //Returns the fast-charge battery regulation voltage, VFAST-CHG.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_G_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR) & 0b00000011) | ((target_val & 0b00111111) << 2)));
-  if(MAX77650_getCHG_CV()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the fast-charge battery regulation voltage, VFAST-CHG.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_CHG_CV(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00000011) | ((target_val & 0b00111111) << 2);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, write_data);
+   ret = (max77658_pm_get_CHG_CV(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setUSBS(int32_t target_val){ //this bit places CHGIN in USB suspend mode
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_G_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR) & 0b11111101) | ((target_val & 0b00000001) << 1)));
-  if(MAX77650_getUSBS()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  this bit places CHGIN in USB suspend mode.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_USBS(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111101) | ((target_val & 0b00000001) << 1);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, write_data);
+   ret = (max77658_pm_get_USBS(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Charger Configuration Register H 0x1F
-int32_t MAX77650_setCHG_CV_JEITA(uint8_t target_val){ //Returns the modified VFAST-CHG for when the battery is either cool or warm as defined by the TCOOL and TWARM temperature thresholds. This register is a don't care if the battery temperature is normal.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_H_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_H_ADDR) & 0b00000011) | ((target_val & 0b00111111) << 2)));
-  if(MAX77650_getCHG_CV_JEITA()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the modified VFAST-CHG for when the battery 
+ * is either cool or warm as defined by the TCOOL and TWARM temperature thresholds.
+ * This register is a don't care if the battery temperature is normal.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_CHG_CV_JEITA(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_H_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00000011) | ((target_val & 0b00111111) << 2);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_H_ADDR, write_data);
+   ret = (max77658_pm_get_CHG_CV_JEITA(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Charger Configuration Register I 0x20
-int32_t MAX77650_setIMON_DISCHG_SCALE(uint8_t target_val){ //Returns the Selects the battery discharge current full-scale current value This 4-bit configuration starts at 7.5mA and ends at 300mA.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_I_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR) & 0b00001111) | ((target_val & 0b00001111) << 4)));
-  if(MAX77650_getIMON_DISCHG_SCALE()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the Selects the battery discharge current full-scale 
+ * current value This 4-bit configuration starts at 7.5mA and ends at 300mA.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_IMON_DISCHG_SCALE(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00001111) | ((target_val & 0b00001111) << 4);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, write_data);
+   ret = (max77658_pm_get_IMON_DISCHG_SCALE(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setMUX_SEL(uint8_t target_val){ //Returns the analog channel to connect to AMUX configuration
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_I_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR) & 0b11110000) | ((target_val & 0b00001111) << 0)));
-  if(MAX77650_getMUX_SEL()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the analog channel to connect to AMUX configuration.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_MUX_SEL(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110000) | ((target_val & 0b00001111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, write_data);
+   ret = (max77658_pm_get_MUX_SEL(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //SIMO Buck-Boost Global Configuration Register 0x28
-int32_t MAX77650_setMRT_OTP(int32_t target_val){ //Returns Manual Reset Time Configuration
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR) & 0b10111111) | ((target_val & 0b00000001) << 6)));
-  if(MAX77650_getMRT_OTP()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns Manual Reset Time Configuration.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_MRT_OTP(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b10111111) | ((target_val & 0b00000001) << 6);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, write_data);
+   ret = (max77658_pm_get_MRT_OTP(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setSBIA_LPM_DEF(int32_t target_val){ //Returns Default voltage of the SBIA_LPM bit
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR) & 0b11011111) | ((target_val & 0b00000001) << 5)));
-  if(MAX77650_getSBIA_LPM_DEF()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns Default voltage of the SBIA_LPM bit.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_SBIA_LPM_DEF(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, write_data);
+   ret = (max77658_pm_get_SBIA_LPM_DEF(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setDBNC_nEN_DEF(int32_t target_val){ //Returns Default Value of the DBNC_nEN bit
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR) & 0b11101111) | ((target_val & 0b00000001) << 4)));
-  if(MAX77650_getDBNC_nEN_DEF()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns Default Value of the DBNC_nEN bit.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_DBNC_nEN_DEF(max77658_pm_t *ctx, uint8_t target_val){
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11101111) | ((target_val & 0b00000001) << 4);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, write_data);
+   ret = (max77658_pm_get_DBNC_nEN_DEF(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setDRV_SBB(uint8_t target_val){ //Returns the SIMO Buck-Boost (all channels) Drive Strength Trim.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR) & 0b11111100) | ((target_val & 0b00000011) << 0)));
-  if(MAX77650_getDRV_SBB()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the SIMO Buck-Boost (all channels) Drive Strength Trim.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_DRV_SBB(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111100) | ((target_val & 0b00000011) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, write_data);
+   ret = (max77658_pm_get_DRV_SBB(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //SIMO Buck-Boost 0 Configuration Register A 0x29
-int32_t MAX77650_setIP_SBB0(uint8_t target_val){ //Returns the SIMO Buck-Boost Channel 0 Peak Current Limit
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR) & 0b00111111) | ((target_val & 0b00000011) << 6)));
-  if(MAX77650_getIP_SBB0()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 0 Peak Current Limit.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_IP_SBB0(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, write_data);
+   ret = (max77658_pm_get_IP_SBB0(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setTV_SBB0(uint8_t target_val){ //Returns the SIMO Buck-Boost Channel 0 Target Output Voltage
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR) & 0b11000000) | ((target_val & 0b00111111) << 0)));
-  if(MAX77650_getTV_SBB0()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 0 Target Output Voltage.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_TV_SBB0(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11000000) | ((target_val & 0b00111111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, write_data);
+   ret = (max77658_pm_get_TV_SBB0(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //SIMO Buck-Boost 0 Configuration Register B 0x2A
-int32_t MAX77650_setADE_SBB0(int32_t target_val){ //Returns SIMO Buck-Boost Channel 0 Active-Discharge Enable
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR) & 0b11110111) | ((target_val & 0b00000001) << 3)));
-  if(MAX77650_getADE_SBB0()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns SIMO Buck-Boost Channel 0 Active-Discharge Enable.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_ADE_SBB0(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, write_data);
+   ret = (max77658_pm_get_ADE_SBB0(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setEN_SBB0(uint8_t target_val){ //Returns the Enable Control for SIMO Buck-Boost Channel 0.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR) & 0b11111000) | ((target_val & 0b00000111) << 0)));
-  if(MAX77650_getEN_SBB0()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the Enable Control for SIMO Buck-Boost Channel 0..[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_EN_SBB0(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111000) | ((target_val & 0b00000111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, write_data);
+   ret = (max77658_pm_get_EN_SBB0(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //SIMO Buck-Boost 1 Configuration Register A 0x2B
-int32_t MAX77650_setIP_SBB1(uint8_t target_val){ //Returns the SIMO Buck-Boost Channel 1 Peak Current Limit
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR) & 0b00111111) | ((target_val & 0b00000011) << 6)));
-  if(MAX77650_getIP_SBB1()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Sets the LDO Target Output Voltage.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_IP_SBB1(max77658_pm_t *ctx, uint8_t target_val){ //Returns the SIMO Buck-Boost Channel 1 Peak Current Limit
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, write_data);
+   ret = (max77658_pm_get_IP_SBB1(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setTV_SBB1(uint8_t target_val){ //Returns the SIMO Buck-Boost Channel 1 Target Output Voltage
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR) & 0b11000000) | ((target_val & 0b00111111) << 0)));
-  if(MAX77650_getTV_SBB1()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 1 Target Output Voltage.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_TV_SBB1(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, write_data);
+   ret = (max77658_pm_get_TV_SBB1(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //SIMO Buck-Boost 1 Configuration Register B 0x2C
-int32_t MAX77650_setADE_SBB1(int32_t target_val){ //Returns SIMO Buck-Boost Channel 1 Active-Discharge Enable
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR) & 0b11110111) | ((target_val & 0b00000001) << 3)));
-  if(MAX77650_getADE_SBB1()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns SIMO Buck-Boost Channel 1 Active-Discharge Enable.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_ADE_SBB1(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, write_data);
+   ret = (max77658_pm_get_ADE_SBB1(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setEN_SBB1(uint8_t target_val){ //Returns the Enable Control for SIMO Buck-Boost Channel 1.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR) & 0b11111000) | ((target_val & 0b00000111) << 0)));
-  if(MAX77650_getEN_SBB1()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Sets the LDO Target Output Voltage.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_EN_SBB1(max77658_pm_t *ctx, uint8_t target_val){ //Returns the Enable Control for SIMO Buck-Boost Channel 1.
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111000) | ((target_val & 0b00000111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, write_data);
+   ret = (max77658_pm_get_EN_SBB1(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //SIMO Buck-Boost 2 Configuration Register A 0x2D
-int32_t MAX77650_setIP_SBB2(uint8_t target_val){ //Returns the SIMO Buck-Boost Channel 2 Peak Current Limit
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR) & 0b00111111) | ((target_val & 0b00000011) << 6)));
-  if(MAX77650_getIP_SBB2()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 2 Peak Current Limit.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_IP_SBB2(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, write_data);
+   ret = (max77658_pm_get_IP_SBB2(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setTV_SBB2(uint8_t target_val){ //Returns the SIMO Buck-Boost Channel 2 Target Output Voltage
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR) & 0b11000000) | ((target_val & 0b00111111) << 0)));
-  if(MAX77650_getTV_SBB2()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the SIMO Buck-Boost Channel 2 Target Output Voltage.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_TV_SBB2(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11000000) | ((target_val & 0b00111111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, write_data);
+   ret = (max77658_pm_get_TV_SBB2(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //SIMO Buck-Boost 2 Configuration Register B 0x2E
-int32_t MAX77650_setADE_SBB2(int32_t target_val){ //Returns SIMO Buck-Boost Channel 2 Active-Discharge Enable
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR) & 0b11110111) | ((target_val & 0b00000001) << 3)));
-  if(MAX77650_getADE_SBB2()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns SIMO Buck-Boost Channel 2 Active-Discharge Enable.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_ADE_SBB2(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, write_data);
+   ret = (max77658_pm_get_ADE_SBB2(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setEN_SBB2(uint8_t target_val){ //Returns the Enable Control for SIMO Buck-Boost Channel 2.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR) & 0b11111000) | ((target_val & 0b00000111) << 0)));
-  if(MAX77650_getEN_SBB2()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns the Enable Control for SIMO Buck-Boost Channel 2.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_EN_SBB2(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111000) | ((target_val & 0b00000111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, write_data);
+   ret = (max77658_pm_get_EN_SBB2(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //LED related registers
-int32_t MAX77650_setEN_LED_MSTR(int32_t target_val){ //Returns Master LED Enable Bit
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR) & 0b11111110) | ((target_val & 0b00000001) << 0)));
-  if(MAX77650_getEN_LED_MSTR()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns Master LED Enable Bit.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_EN_LED_MSTR(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111110) | ((target_val & 0b00000001) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR, write_data);
+   ret = (max77658_pm_get_EN_LED_MSTR(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Register LED0
-int32_t MAX77650_setLED_FS0(uint8_t target_val){ //Returns LED0 Full Scale Range
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR) & 0b00111111) | ((target_val & 0b00000011) << 6)));
-  if(MAX77650_getLED_FS0()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns LED0 Full Scale Range.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_LED_FS0(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, write_data);
+   ret = (max77658_pm_get_LED_FS0(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setINV_LED0(int32_t target_val){ //Returns LED0 Invert
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR) & 0b11011111) | ((target_val & 0b00000001) << 5)));
-  if(MAX77650_getINV_LED0()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED0 Invert.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_INV_LED0(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, write_data);
+   ret = (max77658_pm_get_INV_LED0(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setBRT_LED0(uint8_t target_val){ //Returns LED0 Brightness Control
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR) & 0b11100000) | ((target_val & 0b00011111) << 0)));
-  if(MAX77650_getBRT_LED0()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED0 Brightness Control.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_BRT_LED0(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11100000) | ((target_val & 0b00011111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, write_data);
+   ret = (max77658_pm_get_BRT_LED0(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setP_LED0(uint8_t target_val){ //Returns LED0 Period Settings
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_B_ADDR) & 0b00001111) | ((target_val & 0b00001111) << 4)));
-  if(MAX77650_getP_LED0()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED0 Period Settings.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_P_LED0(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00001111) | ((target_val & 0b00001111) << 4);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_B_ADDR, write_data);
+   ret = (max77658_pm_get_P_LED0(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setD_LED0(uint8_t target_val){ //Returns LED0 On Duty-Cycle Settings
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_B_ADDR) & 0b11110000) | ((target_val & 0b00001111) << 0)));
-  if(MAX77650_getD_LED0()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED0 On Duty-Cycle Settings.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_D_LED0(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110000) | ((target_val & 0b00001111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_B_ADDR, write_data);
+   ret = (max77658_pm_get_D_LED0(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Register LED1
-int32_t MAX77650_setLED_FS1(uint8_t target_val){ //Returns LED1 Full Scale Range
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR) & 0b00111111) | ((target_val & 0b00000011) << 6)));
-  if(MAX77650_getLED_FS1()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns LED1 Full Scale Range.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_LED_FS1(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, write_data);
+   ret = (max77658_pm_get_LED_FS1(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setINV_LED1(int32_t target_val){ //Returns LED1 Invert
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR) & 0b11011111) | ((target_val & 0b00000001) << 5)));
-  if(MAX77650_getINV_LED1()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED1 Invert.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_INV_LED1(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, write_data);
+   ret = (max77658_pm_get_INV_LED1(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setBRT_LED1(uint8_t target_val){ //Returns LED1 Brightness Control
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR) & 0b11100000) | ((target_val & 0b00011111) << 0)));
-  if(MAX77650_getBRT_LED1()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED1 Brightness Control.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_BRT_LED1(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11100000) | ((target_val & 0b00011111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, write_data);
+   ret = (max77658_pm_get_BRT_LED1(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setP_LED1(uint8_t target_val){ //Returns LED1 Period Settings
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_B_ADDR) & 0b00001111) | ((target_val & 0b00001111) << 4)));
-  if(MAX77650_getP_LED1()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Sets the LDO Target Output Voltage.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_P_LED1(max77658_pm_t *ctx, uint8_t target_val){ //Returns LED1 Period Settings
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00001111) | ((target_val & 0b00001111) << 4);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_B_ADDR, write_data);
+   ret = (max77658_pm_get_P_LED1(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setD_LED1(uint8_t target_val){ //Returns LED1 On Duty-Cycle Settings
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_B_ADDR) & 0b11110000) | ((target_val & 0b00001111) << 0)));
-  if(MAX77650_getD_LED1()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED1 On Duty-Cycle Settings.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_D_LED1(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110000) | ((target_val & 0b00001111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_B_ADDR, write_data);
+   ret = (max77658_pm_get_D_LED1(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Register LED2
-int32_t MAX77650_setLED_FS2(uint8_t target_val){ //Returns LED2 Full Scale Range
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR) & 0b00111111) | ((target_val & 0b00000011) << 6)));
-  if(MAX77650_getLED_FS2()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns LED2 Full Scale Range.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_LED_FS2(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, write_data);
+   ret = (max77658_pm_get_LED_FS2(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setINV_LED2(int32_t target_val){ //Returns LED2 Invert
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR) & 0b11011111) | ((target_val & 0b00000001) << 5)));
-  if(MAX77650_getINV_LED2()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED2 Invert.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_INV_LED2(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, write_data);
+   ret = (max77658_pm_get_INV_LED2(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setBRT_LED2(uint8_t target_val){ //Returns LED2 Brightness Control
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_A_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR) & 0b11100000) | ((target_val & 0b00011111) << 0)));
-  if(MAX77650_getBRT_LED2()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED2 Brightness Control.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_BRT_LED2(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11100000) | ((target_val & 0b00011111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, write_data);
+   ret = (max77658_pm_get_BRT_LED2(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setP_LED2(uint8_t target_val){ //Returns LED2 Period Settings
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_B_ADDR) & 0b00001111) | ((target_val & 0b00001111) << 4)));
-  if(MAX77650_getP_LED2()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED2 Period Settings.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_P_LED2(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b00001111) | ((target_val & 0b00001111) << 4);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_B_ADDR, write_data);
+   ret = (max77658_pm_get_P_LED2(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setD_LED2(uint8_t target_val){ //Returns LED2 On Duty-Cycle Settings
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_B_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_B_ADDR) & 0b11110000) | ((target_val & 0b00001111) << 0)));
-  if(MAX77650_getD_LED2()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns LED2 On Duty-Cycle Settings.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_D_LED2(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_B_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110000) | ((target_val & 0b00001111) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_B_ADDR, write_data);
+   ret = (max77658_pm_get_D_LED2(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Global Configuration register 0x10
-int32_t MAX77650_setBOK(int32_t target_val){ //Returns Main Bias Okay Status Bit
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR) & 0b10111111) | ((target_val & 0b00000001) << 6)));
-  if(MAX77650_getBOK()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns Main Bias Okay Status Bit.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_BOK(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b10111111) | ((target_val & 0b00000001) << 6);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = (max77658_pm_get_BOK(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setSBIA_LPM(int32_t target_val){ //Returns Main Bias Low-Power Mode software request
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR) & 0b11011111) | ((target_val & 0b00000001) << 5)));
-  if(MAX77650_getSBIA_LPM()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns Main Bias Low-Power Mode software request.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_SBIA_LPM(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = (max77658_pm_get_SBIA_LPM(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setSBIA_EN(int32_t target_val){ //Returns Main Bias Enable Software Request
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR) & 0b11101111) | ((target_val & 0b00000001) << 4)));
-  if(MAX77650_getSBIA_EN()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns Main Bias Enable Software Request.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_SBIA_EN(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11101111) | ((target_val & 0b00000001) << 4);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = (max77658_pm_get_SBIA_EN(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setnEN_MODE(int32_t target_val){ //Returns nEN Input (ONKEY) Default Configuration Mode
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR) & 0b11110111) | ((target_val & 0b00000001) << 3)));
-  if(MAX77650_getnEN_MODE()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns nEN Input (ONKEY) Default Configuration Mode.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_nEN_MODE(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = (max77658_pm_get_nEN_MODE(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setDBEN_nEN(int32_t target_val){ //Returns Debounce Timer Enable for the nEN Pin
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR) & 0b11111011) | ((target_val & 0b00000001) << 2)));
-  if(MAX77650_getDBEN_nEN()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns Debounce Timer Enable for the nEN Pin.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_DBEN_nEN(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111011) | ((target_val & 0b00000001) << 2);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = (max77658_pm_get_DBEN_nEN(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setSFT_RST(uint8_t target_val){ //Returns Software Reset Functions.
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR) & 0b11111100) | ((target_val & 0b00000011) << 0)));
-  if(MAX77650_getSFT_RST()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns Software Reset Functions.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_SFT_RST(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111100) | ((target_val & 0b00000011) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = (max77658_pm_get_SFT_RST(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Global Interrupt Mask Register 0x06
-int32_t MAX77650_setINT_M_GLBL(uint8_t target_val){ //Sets Global Interrupt Mask Register
-  max77658_pm_write_reg(ctx, MAX77650_INTM_GLBL_ADDR,(target_val & 0b01111111));
-  if(MAX77650_getINT_M_GLBL()==(target_val & 0b01111111))
-   return true;
-  else
-   return false;
+/**
+ * @brief  Sets Global Interrupt Mask Register.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_INT_M_GLBL(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t write_data[1];
+
+   write_data[0] = target_val & 0b01111111;
+   ret = max77658_pm_write_reg(ctx, MAX77650_INTM_GLBL_ADDR, write_data);
+   ret = (max77658_pm_get_INT_M_GLBL(ctx) == (target_val & 0b01111111))?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //GPIO Configuration Register
-int32_t MAX77650_setDBEN_GPI(int32_t target_val){ //Returns General Purpose Input Debounce Timer Enable
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR) & 0b11101111) | ((target_val & 0b00000001) << 4)));
-  if(MAX77650_getDBEN_GPI()==target_val)
-   return true;
-  else
-   return false;
+/**
+ * @brief  Returns General Purpose Input Debounce Timer Enable.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_DBEN_GPI(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11101111) | ((target_val & 0b00000001) << 4);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR, write_data);
+   ret = (max77658_pm_get_DBEN_GPI(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setDO(int32_t target_val){ //Returns General Purpose Output Data Output
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR) & 0b11110111) | ((target_val & 0b00000001) << 3)));
-  if(MAX77650_getDO()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Sets the LDO Target Output Voltage.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_DO(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR, write_data);
+   ret = (max77658_pm_get_DO(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setDRV(int32_t target_val){ //Returns General Purpose Output Driver Type
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR) & 0b11111011) | ((target_val & 0b00000001) << 2)));
-  if(MAX77650_getDRV()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns General Purpose Output Driver Type.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_DRV(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111011) | ((target_val & 0b00000001) << 2);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR, write_data);
+   ret = (max77658_pm_get_DRV(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setDI(int32_t target_val){ //Returns GPIO Digital Input Value
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR) & 0b11111101) | ((target_val & 0b00000001) << 1)));
-  if(MAX77650_getDI()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Returns GPIO Digital Input Value.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_DI(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111101) | ((target_val & 0b00000001) << 1);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR, write_data);
+   ret = (max77658_pm_get_DI(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
-int32_t MAX77650_setDIR(int32_t target_val){ //Returns GPIO Direction
-  max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR,((max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR) & 0b11111110) | ((target_val & 0b00000001) << 0)));
-  if(MAX77650_getDIR()==target_val)
-   return true;
-  else
-   return false;
+
+/**
+ * @brief  Sets the LDO Target Output Voltage.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_DIR(max77658_pm_t *ctx, uint8_t target_val){ //Returns GPIO Direction
+   int32_t ret;
+   uint8_t curr_data;
+   uint8_t write_data[1];
+
+   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &curr_data);
+   write_data[0] = (curr_data & 0b11111110) | ((target_val & 0b00000001) << 0);
+   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR, write_data);
+   ret = (max77658_pm_get_DIR(ctx) == target_val)?SUCCESS:ERROR;
+  
+   return ret;
 }
 
 //Charger Interrupt Mask Register 0x07
-int32_t MAX77650_setINT_M_CHG(uint8_t target_val){ //Sets Global Interrupt Mask Register
-  max77658_pm_write_reg(ctx, MAX77650_INT_M_CHG_ADDR,(target_val & 0b01111111));
-  if(MAX77650_getINT_M_CHG()==(target_val & 0b01111111))
-   return true;
-  else
-   return false;
+/**
+ * @brief  Sets Global Interrupt Mask Register.[set]
+ *
+ * @param  ctx      read / write interface definitions
+ * @retval          -1: I2C error. 0: Success
+ */
+int32_t max77658_pm_set_INT_M_CHG(max77658_pm_t *ctx, uint8_t target_val)
+{
+   int32_t ret;
+   uint8_t write_data[1];
+
+   write_data[0] = target_val & 0b01111111;
+   ret = max77658_pm_write_reg(ctx, MAX77650_INT_M_CHG_ADDR, write_data);
+   ret = (max77658_pm_get_INT_M_CHG(ctx) == write_data[0])?SUCCESS:ERROR;
+  
+   return ret;
 }
 
