@@ -73,7 +73,7 @@ int32_t max77658_pm_get_DIDM(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000011;
@@ -94,7 +94,7 @@ int32_t max77658_pm_get_LDO_dropout_detector(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 5) & 0b00000001;
@@ -115,7 +115,7 @@ int32_t max77658_pm_get_thermal_alarm1(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 3) & 0b00000001;
@@ -136,7 +136,7 @@ int32_t max77658_pm_get_thermal_alarm2(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00000001;
@@ -157,7 +157,7 @@ int32_t max77658_pm_get_debounce_Status_nEN0(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 2) & 0b00000001;
@@ -178,7 +178,7 @@ int32_t max77658_pm_get_debounce_Status_PWR_HLD(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 1) & 0b00000001;
@@ -199,7 +199,7 @@ int32_t max77658_pm_get_ERCFLAG(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = (max77658_pm_read_reg(ctx, MAX77650_ERCFLAG_ADDR, &data) > 0)?data:(-1);
+   ret = (max77658_pm_read_reg(ctx, MAX77658_PM_ERCFLAG_ADDR, &data) > 0)?data:(-1);
 
    return ret;
 }
@@ -216,7 +216,7 @@ int32_t max77658_pm_get_chipID(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CID_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CID_ADDR, &data);
    if(ret > 0)
    {
       ret = (data & 0b00001111);
@@ -237,7 +237,7 @@ int32_t max77658_pm_get_VCHGIN_MIN_STAT(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_CHG_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_CHG_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000001;
@@ -258,7 +258,7 @@ int32_t max77658_pm_get_ICHGIN_LIM_STAT(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_CHG_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_CHG_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 5) & 0b00000001;
@@ -279,7 +279,7 @@ int32_t max77658_pm_get_VSYS_MIN_STAT(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_CHG_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_CHG_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00000001;
@@ -300,7 +300,7 @@ int32_t max77658_pm_get_TJ_REG_STAT(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_CHG_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_CHG_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 3) & 0b00000001;
@@ -321,7 +321,7 @@ int32_t max77658_pm_get_THM_DTLS(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_CHG_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_CHG_A_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000111;
@@ -342,7 +342,7 @@ int32_t max77658_pm_get_CHG_DTLS(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_CHG_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_CHG_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00001111;
@@ -363,7 +363,7 @@ int32_t max77658_pm_get_CHGIN_DTLS(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_CHG_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_CHG_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 2) & 0b00000011;
@@ -384,7 +384,7 @@ int32_t max77658_pm_get_CHG(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_CHG_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_CHG_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 1) & 0b00000001;
@@ -405,7 +405,7 @@ int32_t max77658_pm_get_TIME_SUS(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_STAT_CHG_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_STAT_CHG_B_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000001;
@@ -426,7 +426,7 @@ int32_t max77658_pm_get_LED_FS0(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED0_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000011;
@@ -447,7 +447,7 @@ int32_t max77658_pm_get_INV_LED0(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED0_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 5) & 0b00000001;
@@ -468,7 +468,7 @@ int32_t max77658_pm_get_BRT_LED0(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED0_A_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00011111;
@@ -489,7 +489,7 @@ int32_t max77658_pm_get_P_LED0(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED0_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00001111;
@@ -510,7 +510,7 @@ int32_t max77658_pm_get_D_LED0(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED0_B_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00001111;
@@ -531,7 +531,7 @@ int32_t max77658_pm_get_LED_FS1(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED1_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000011;
@@ -552,7 +552,7 @@ int32_t max77658_pm_get_INV_LED1(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED1_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 5) & 0b00000001;
@@ -573,7 +573,7 @@ int32_t max77658_pm_get_BRT_LED1(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED1_A_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00011111;
@@ -594,7 +594,7 @@ int32_t max77658_pm_get_P_LED1(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED1_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00001111;
@@ -615,7 +615,7 @@ int32_t max77658_pm_get_D_LED1(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED1_B_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00001111;
@@ -636,7 +636,7 @@ int32_t max77658_pm_get_LED_FS2(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED2_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000011;
@@ -657,7 +657,7 @@ int32_t max77658_pm_get_INV_LED2(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED2_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 5) & 0b00000001;
@@ -678,7 +678,7 @@ int32_t max77658_pm_get_BRT_LED2(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED2_A_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00011111;
@@ -699,7 +699,7 @@ int32_t max77658_pm_get_P_LED2(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED2_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00001111;
@@ -720,7 +720,7 @@ int32_t max77658_pm_get_D_LED2(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED2_B_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00001111;
@@ -741,7 +741,7 @@ int32_t max77658_pm_get_BOK(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000001;
@@ -762,7 +762,7 @@ int32_t max77658_pm_get_SBIA_LPM(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 5) & 0b00000001;
@@ -783,7 +783,7 @@ int32_t max77658_pm_get_SBIA_EN(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00000001;
@@ -804,7 +804,7 @@ int32_t max77658_pm_get_nEN_MODE(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 3) & 0b00000001;
@@ -825,7 +825,7 @@ int32_t max77658_pm_get_DBEN_nEN(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 2) & 0b00000001;
@@ -846,7 +846,7 @@ int32_t max77658_pm_get_SFT_RST(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000001;
@@ -867,7 +867,7 @@ int32_t max77658_pm_get_INT_GLBL(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_INT_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_INT_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = data;
@@ -888,7 +888,7 @@ int32_t max77658_pm_get_INT_M_GLBL(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_INTM_GLBL_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_INTM_GLBL_ADDR, &data);
    if(ret > 0)
    {
       ret = (data & 0b01111111);
@@ -909,7 +909,7 @@ int32_t max77658_pm_get_DBEN_GPI(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00000001;
@@ -930,7 +930,7 @@ int32_t max77658_pm_get_DO(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 3) & 0b00000001;
@@ -951,7 +951,7 @@ int32_t max77658_pm_get_DRV(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 2) & 0b00000001;
@@ -972,7 +972,7 @@ int32_t max77658_pm_get_DI(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 1) & 0b00000001;
@@ -993,7 +993,7 @@ int32_t max77658_pm_get_DIR(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, &data);
    if(ret > 0)
    {
       ret = (data & 0b00000001);
@@ -1015,7 +1015,7 @@ int32_t max77658_pm_get_INT_CHG(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_INT_CHG_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_INT_CHG_ADDR, &data);
    if(ret > 0)
    {
       ret = data;
@@ -1037,7 +1037,7 @@ int32_t max77658_pm_get_INT_M_CHG(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_INT_M_CHG_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_INT_M_CHG_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b01111111;
@@ -1059,7 +1059,7 @@ int32_t max77658_pm_get_THM_HOT(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000011;
@@ -1080,7 +1080,7 @@ int32_t max77658_pm_get_THM_WARM(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00000011;
@@ -1101,7 +1101,7 @@ int32_t max77658_pm_get_THM_COOL(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 2) & 0b00000011;
@@ -1122,7 +1122,7 @@ int32_t max77658_pm_get_THM_COLD(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000011;
@@ -1144,7 +1144,7 @@ int32_t max77658_pm_get_VCHGIN_MIN(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 5) & 0b00000111;
@@ -1165,7 +1165,7 @@ int32_t max77658_pm_get_ICHGIN_LIM(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 2) & 0b00000111;
@@ -1186,7 +1186,7 @@ int32_t max77658_pm_get_I_PQ(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 1) & 0b00000001;
@@ -1207,7 +1207,7 @@ int32_t max77658_pm_get_CHG_EN(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000001;
@@ -1229,7 +1229,7 @@ int32_t max77658_pm_get_CHG_PQ(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_C_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 5) & 0b00000111;
@@ -1251,7 +1251,7 @@ int32_t max77658_pm_get_I_TERM(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_C_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 3) & 0b00000011;
@@ -1272,7 +1272,7 @@ int32_t max77658_pm_get_T_TOPOFF(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_C_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000111;
@@ -1294,7 +1294,7 @@ int32_t max77658_pm_get_TJ_REG(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_D_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 5) & 0b00000111;
@@ -1315,7 +1315,7 @@ int32_t max77658_pm_get_VSYS_REG(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_D_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00011111;
@@ -1337,7 +1337,7 @@ int32_t max77658_pm_get_CHG_CC(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_E_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 2) & 0b00111111;
@@ -1357,7 +1357,7 @@ int32_t max77658_pm_get_T_FAST_CHG(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_E_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000011;
@@ -1380,7 +1380,7 @@ int32_t max77658_pm_get_CHG_CC_JEITA(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_F_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 2) & 0b00111111;
@@ -1400,7 +1400,7 @@ int32_t max77658_pm_get_THM_EN(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_F_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 1) & 0b00000001;
@@ -1421,7 +1421,7 @@ int32_t max77658_pm_get_CHG_CV(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_G_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 2) & 0b00111111;
@@ -1441,7 +1441,7 @@ int32_t max77658_pm_get_USBS(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_G_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 1) & 0b00000001;
@@ -1464,7 +1464,7 @@ int32_t max77658_pm_get_CHG_CV_JEITA(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_H_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_H_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 2) & 0b00111111;
@@ -1487,7 +1487,7 @@ int32_t max77658_pm_get_IMON_DISCHG_SCALE(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_I_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00001111;
@@ -1507,7 +1507,7 @@ int32_t max77658_pm_get_MUX_SEL(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_I_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00001111;
@@ -1528,7 +1528,7 @@ int32_t max77658_pm_get_TV_LDO(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LDO_A_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b01111111;
@@ -1549,7 +1549,7 @@ int32_t max77658_pm_get_ADE_LDO(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LDO_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 3) & 0b00000001;
@@ -1569,7 +1569,7 @@ int32_t max77658_pm_get_EN_LDO(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LDO_B_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000111;
@@ -1590,7 +1590,7 @@ int32_t max77658_pm_get_MRT_OTP(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000001;
@@ -1610,7 +1610,7 @@ int32_t max77658_pm_get_SBIA_LPM_DEF(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 5) & 0b00000001;
@@ -1630,7 +1630,7 @@ int32_t max77658_pm_get_DBNC_nEN_DEF(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 4) & 0b00000001;
@@ -1650,7 +1650,7 @@ int32_t max77658_pm_get_DRV_SBB(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000011;
@@ -1671,7 +1671,7 @@ int32_t max77658_pm_get_IP_SBB0(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB0_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000011;
@@ -1691,7 +1691,7 @@ int32_t max77658_pm_get_TV_SBB0(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB0_A_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00111111;
@@ -1711,7 +1711,7 @@ int32_t max77658_pm_get_ADE_SBB0(max77658_pm_t *ctx){ //
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB0_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 3) & 0b00000001;
@@ -1731,7 +1731,7 @@ int32_t max77658_pm_get_EN_SBB0(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB0_B_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000111;
@@ -1752,7 +1752,7 @@ int32_t max77658_pm_get_IP_SBB1(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB1_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000011;
@@ -1772,7 +1772,7 @@ int32_t max77658_pm_get_TV_SBB1(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB1_A_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00111111;
@@ -1793,7 +1793,7 @@ int32_t max77658_pm_get_ADE_SBB1(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB1_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 3) & 0b00000001;
@@ -1813,7 +1813,7 @@ int32_t max77658_pm_get_EN_SBB1(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB1_B_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000111;
@@ -1834,7 +1834,7 @@ int32_t max77658_pm_get_IP_SBB2(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB2_A_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 6) & 0b00000011;
@@ -1854,7 +1854,7 @@ int32_t max77658_pm_get_TV_SBB2(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB2_A_ADDR, &data);
    if(ret > 0)
    {
       ret = data& 0b00111111;
@@ -1875,7 +1875,7 @@ int32_t max77658_pm_get_ADE_SBB2(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB2_B_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 3) & 0b00000001;
@@ -1895,7 +1895,7 @@ int32_t max77658_pm_get_EN_SBB2(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB2_B_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000111;
@@ -1915,7 +1915,7 @@ int32_t max77658_pm_get_CLK_64_S(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED_TOP_ADDR, &data);
    if(ret > 0)
    {
       ret = (data >> 1) & 0b00000001;
@@ -1935,7 +1935,7 @@ int32_t max77658_pm_get_EN_LED_MSTR(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED_TOP_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00000001;
@@ -1957,7 +1957,7 @@ int32_t max77658_pm_get_CID(max77658_pm_t *ctx)
    int32_t ret;
    uint8_t data;
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CID_ADDR, &data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CID_ADDR, &data);
    if(ret > 0)
    {
       ret = data & 0b00001111;
@@ -1982,9 +1982,9 @@ int32_t max77658_pm_set_TV_LDO(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LDO_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b10000000) | ((target_val & 0b01111111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LDO_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LDO_A_ADDR, write_data);
    ret = (max77658_pm_get_TV_LDO(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2003,9 +2003,9 @@ int32_t max77658_pm_set_ADE_LDO(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LDO_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LDO_B_ADDR, write_data);
    ret = (max77658_pm_get_ADE_LDO(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2023,9 +2023,9 @@ int32_t max77658_pm_set_EN_LDO(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LDO_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111000) | ((target_val & 0b00000111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LDO_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LDO_B_ADDR, write_data);
    ret = (max77658_pm_get_EN_LDO(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2044,9 +2044,9 @@ int32_t max77658_pm_set_THM_HOT(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, write_data);
    ret = (max77658_pm_get_THM_HOT(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2064,9 +2064,9 @@ int32_t max77658_pm_set_THM_WARM(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11001111) | ((target_val & 0b00000011) << 4);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, write_data);
    ret = (max77658_pm_get_THM_WARM(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2084,9 +2084,9 @@ int32_t max77658_pm_set_THM_COOL(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110011) | ((target_val & 0b00000011) << 2);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, write_data);
    ret = (max77658_pm_get_THM_COOL(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2104,9 +2104,9 @@ int32_t max77658_pm_set_THM_COLD(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111100) | ((target_val & 0b00000011) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_A_ADDR, write_data);
    ret = (max77658_pm_get_THM_COLD(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2125,9 +2125,9 @@ int32_t max77658_pm_set_VCHGIN_MIN(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00011111) | ((target_val & 0b00000111) << 5);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, write_data);
    ret = (max77658_pm_get_VCHGIN_MIN(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2145,9 +2145,9 @@ int32_t max77658_pm_set_ICHGIN_LIM(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11100011) | ((target_val & 0b00000111) << 2);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, write_data);
    ret = (max77658_pm_get_ICHGIN_LIM(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2165,9 +2165,9 @@ int32_t max77658_pm_set_I_PQ(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111101) | ((target_val & 0b00000001) << 1);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, write_data);
    ret = (max77658_pm_get_I_PQ(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2185,9 +2185,9 @@ int32_t max77658_pm_set_CHG_EN(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111110) | ((target_val & 0b00000001) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_B_ADDR, write_data);
    ret = (max77658_pm_get_CHG_EN(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2206,9 +2206,9 @@ int32_t max77658_pm_set_CHG_PQ(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_C_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00011111) | ((target_val & 0b00000111) << 5);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_C_ADDR, write_data);
    ret = (max77658_pm_get_CHG_PQ(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2228,9 +2228,9 @@ int32_t max77658_pm_set_I_TERM(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_C_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11100111) | ((target_val & 0b00000011) << 3);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_C_ADDR, write_data);
    ret = (max77658_pm_get_I_TERM(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2248,9 +2248,9 @@ int32_t max77658_pm_set_T_TOPOFF(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_C_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111000) | ((target_val & 0b00000111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_C_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_C_ADDR, write_data);
    ret = (max77658_pm_get_T_TOPOFF(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2269,9 +2269,9 @@ int32_t max77658_pm_set_TJ_REG(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_D_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00011111) | ((target_val & 0b00000111) << 5);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_D_ADDR, write_data);
    ret = (max77658_pm_get_TJ_REG(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2289,9 +2289,9 @@ int32_t max77658_pm_set_VSYS_REG(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_D_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11100000) | ((target_val & 0b00011111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_D_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_D_ADDR, write_data);
    ret = (max77658_pm_get_VSYS_REG(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2310,9 +2310,9 @@ int32_t max77658_pm_set_CHG_CC(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_E_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00000011) | ((target_val & 0b00111111) << 2);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_E_ADDR, write_data);
    ret = (max77658_pm_get_CHG_CC(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2330,9 +2330,9 @@ int32_t max77658_pm_set_T_FAST_CHG(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_E_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111100) | ((target_val & 0b00000011) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_E_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_E_ADDR, write_data);
    ret = (max77658_pm_get_T_FAST_CHG(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2353,9 +2353,9 @@ int32_t max77658_pm_set_CHG_CC_JEITA(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_F_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00000011) | ((target_val & 0b00111111) << 2);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_F_ADDR, write_data);
    ret = (max77658_pm_get_CHG_CC_JEITA(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2373,9 +2373,9 @@ int32_t max77658_pm_set_THM_EN(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_F_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111101) | ((target_val & 0b00000001) << 1);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_F_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_F_ADDR, write_data);
    ret = (max77658_pm_get_THM_EN(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2394,9 +2394,9 @@ int32_t max77658_pm_set_CHG_CV(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_G_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00000011) | ((target_val & 0b00111111) << 2);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_G_ADDR, write_data);
    ret = (max77658_pm_get_CHG_CV(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2414,9 +2414,9 @@ int32_t max77658_pm_set_USBS(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_G_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111101) | ((target_val & 0b00000001) << 1);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_G_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_G_ADDR, write_data);
    ret = (max77658_pm_get_USBS(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2437,9 +2437,9 @@ int32_t max77658_pm_set_CHG_CV_JEITA(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_H_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_H_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00000011) | ((target_val & 0b00111111) << 2);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_H_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_H_ADDR, write_data);
    ret = (max77658_pm_get_CHG_CV_JEITA(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2459,9 +2459,9 @@ int32_t max77658_pm_set_IMON_DISCHG_SCALE(max77658_pm_t *ctx, uint8_t target_val
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_I_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00001111) | ((target_val & 0b00001111) << 4);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_I_ADDR, write_data);
    ret = (max77658_pm_get_IMON_DISCHG_SCALE(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2479,9 +2479,9 @@ int32_t max77658_pm_set_MUX_SEL(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_CHG_I_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110000) | ((target_val & 0b00001111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_CHG_I_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_CHG_I_ADDR, write_data);
    ret = (max77658_pm_get_MUX_SEL(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2500,9 +2500,9 @@ int32_t max77658_pm_set_MRT_OTP(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b10111111) | ((target_val & 0b00000001) << 6);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, write_data);
    ret = (max77658_pm_get_MRT_OTP(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2520,9 +2520,9 @@ int32_t max77658_pm_set_SBIA_LPM_DEF(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, write_data);
    ret = (max77658_pm_get_SBIA_LPM_DEF(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2539,9 +2539,9 @@ int32_t max77658_pm_set_DBNC_nEN_DEF(max77658_pm_t *ctx, uint8_t target_val){
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11101111) | ((target_val & 0b00000001) << 4);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, write_data);
    ret = (max77658_pm_get_DBNC_nEN_DEF(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2559,9 +2559,9 @@ int32_t max77658_pm_set_DRV_SBB(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111100) | ((target_val & 0b00000011) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB_TOP_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB_TOP_ADDR, write_data);
    ret = (max77658_pm_get_DRV_SBB(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2580,9 +2580,9 @@ int32_t max77658_pm_set_IP_SBB0(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB0_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB0_A_ADDR, write_data);
    ret = (max77658_pm_get_IP_SBB0(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2600,9 +2600,9 @@ int32_t max77658_pm_set_TV_SBB0(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB0_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11000000) | ((target_val & 0b00111111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB0_A_ADDR, write_data);
    ret = (max77658_pm_get_TV_SBB0(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2621,9 +2621,9 @@ int32_t max77658_pm_set_ADE_SBB0(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB0_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB0_B_ADDR, write_data);
    ret = (max77658_pm_get_ADE_SBB0(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2641,9 +2641,9 @@ int32_t max77658_pm_set_EN_SBB0(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB0_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111000) | ((target_val & 0b00000111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB0_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB0_B_ADDR, write_data);
    ret = (max77658_pm_get_EN_SBB0(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2661,9 +2661,9 @@ int32_t max77658_pm_set_IP_SBB1(max77658_pm_t *ctx, uint8_t target_val){ //Retur
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB1_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB1_A_ADDR, write_data);
    ret = (max77658_pm_get_IP_SBB1(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2681,9 +2681,9 @@ int32_t max77658_pm_set_TV_SBB1(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB1_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB1_A_ADDR, write_data);
    ret = (max77658_pm_get_TV_SBB1(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2702,9 +2702,9 @@ int32_t max77658_pm_set_ADE_SBB1(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB1_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB1_B_ADDR, write_data);
    ret = (max77658_pm_get_ADE_SBB1(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2721,9 +2721,9 @@ int32_t max77658_pm_set_EN_SBB1(max77658_pm_t *ctx, uint8_t target_val){ //Retur
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB1_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111000) | ((target_val & 0b00000111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB1_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB1_B_ADDR, write_data);
    ret = (max77658_pm_get_EN_SBB1(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2742,9 +2742,9 @@ int32_t max77658_pm_set_IP_SBB2(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB2_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB2_A_ADDR, write_data);
    ret = (max77658_pm_get_IP_SBB2(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2762,9 +2762,9 @@ int32_t max77658_pm_set_TV_SBB2(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB2_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11000000) | ((target_val & 0b00111111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB2_A_ADDR, write_data);
    ret = (max77658_pm_get_TV_SBB2(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2783,9 +2783,9 @@ int32_t max77658_pm_set_ADE_SBB2(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB2_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB2_B_ADDR, write_data);
    ret = (max77658_pm_get_ADE_SBB2(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2803,9 +2803,9 @@ int32_t max77658_pm_set_EN_SBB2(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_SBB2_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111000) | ((target_val & 0b00000111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_SBB2_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_SBB2_B_ADDR, write_data);
    ret = (max77658_pm_get_EN_SBB2(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2824,9 +2824,9 @@ int32_t max77658_pm_set_EN_LED_MSTR(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED_TOP_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111110) | ((target_val & 0b00000001) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED_TOP_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED_TOP_ADDR, write_data);
    ret = (max77658_pm_get_EN_LED_MSTR(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2845,9 +2845,9 @@ int32_t max77658_pm_set_LED_FS0(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED0_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED0_A_ADDR, write_data);
    ret = (max77658_pm_get_LED_FS0(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2865,9 +2865,9 @@ int32_t max77658_pm_set_INV_LED0(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED0_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED0_A_ADDR, write_data);
    ret = (max77658_pm_get_INV_LED0(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2885,9 +2885,9 @@ int32_t max77658_pm_set_BRT_LED0(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED0_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11100000) | ((target_val & 0b00011111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED0_A_ADDR, write_data);
    ret = (max77658_pm_get_BRT_LED0(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2905,9 +2905,9 @@ int32_t max77658_pm_set_P_LED0(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED0_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00001111) | ((target_val & 0b00001111) << 4);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED0_B_ADDR, write_data);
    ret = (max77658_pm_get_P_LED0(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2925,9 +2925,9 @@ int32_t max77658_pm_set_D_LED0(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED0_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED0_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110000) | ((target_val & 0b00001111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED0_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED0_B_ADDR, write_data);
    ret = (max77658_pm_get_D_LED0(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2946,9 +2946,9 @@ int32_t max77658_pm_set_LED_FS1(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED1_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED1_A_ADDR, write_data);
    ret = (max77658_pm_get_LED_FS1(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2966,9 +2966,9 @@ int32_t max77658_pm_set_INV_LED1(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED1_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED1_A_ADDR, write_data);
    ret = (max77658_pm_get_INV_LED1(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -2986,9 +2986,9 @@ int32_t max77658_pm_set_BRT_LED1(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED1_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11100000) | ((target_val & 0b00011111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED1_A_ADDR, write_data);
    ret = (max77658_pm_get_BRT_LED1(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3005,9 +3005,9 @@ int32_t max77658_pm_set_P_LED1(max77658_pm_t *ctx, uint8_t target_val){ //Return
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED1_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00001111) | ((target_val & 0b00001111) << 4);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED1_B_ADDR, write_data);
    ret = (max77658_pm_get_P_LED1(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3025,9 +3025,9 @@ int32_t max77658_pm_set_D_LED1(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED1_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED1_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110000) | ((target_val & 0b00001111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED1_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED1_B_ADDR, write_data);
    ret = (max77658_pm_get_D_LED1(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3046,9 +3046,9 @@ int32_t max77658_pm_set_LED_FS2(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED2_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00111111) | ((target_val & 0b00000011) << 6);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED2_A_ADDR, write_data);
    ret = (max77658_pm_get_LED_FS2(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3066,9 +3066,9 @@ int32_t max77658_pm_set_INV_LED2(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED2_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED2_A_ADDR, write_data);
    ret = (max77658_pm_get_INV_LED2(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3086,9 +3086,9 @@ int32_t max77658_pm_set_BRT_LED2(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED2_A_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11100000) | ((target_val & 0b00011111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_A_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED2_A_ADDR, write_data);
    ret = (max77658_pm_get_BRT_LED2(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3106,9 +3106,9 @@ int32_t max77658_pm_set_P_LED2(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED2_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b00001111) | ((target_val & 0b00001111) << 4);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED2_B_ADDR, write_data);
    ret = (max77658_pm_get_P_LED2(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3126,9 +3126,9 @@ int32_t max77658_pm_set_D_LED2(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_LED2_B_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_LED2_B_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110000) | ((target_val & 0b00001111) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_LED2_B_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_LED2_B_ADDR, write_data);
    ret = (max77658_pm_get_D_LED2(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3147,9 +3147,9 @@ int32_t max77658_pm_set_BOK(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b10111111) | ((target_val & 0b00000001) << 6);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, write_data);
    ret = (max77658_pm_get_BOK(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3167,9 +3167,9 @@ int32_t max77658_pm_set_SBIA_LPM(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, write_data);
    ret = (max77658_pm_get_SBIA_LPM(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3187,9 +3187,9 @@ int32_t max77658_pm_set_SBIA_EN(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11101111) | ((target_val & 0b00000001) << 4);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, write_data);
    ret = (max77658_pm_get_SBIA_EN(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3207,9 +3207,9 @@ int32_t max77658_pm_set_nEN_MODE(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, write_data);
    ret = (max77658_pm_get_nEN_MODE(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3227,9 +3227,9 @@ int32_t max77658_pm_set_DBEN_nEN(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111011) | ((target_val & 0b00000001) << 2);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, write_data);
    ret = (max77658_pm_get_DBEN_nEN(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3247,9 +3247,9 @@ int32_t max77658_pm_set_SFT_RST(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GLBL_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111100) | ((target_val & 0b00000011) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GLBL_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GLBL_ADDR, write_data);
    ret = (max77658_pm_get_SFT_RST(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3268,7 +3268,7 @@ int32_t max77658_pm_set_INT_M_GLBL(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t write_data[1];
 
    write_data[0] = target_val & 0b01111111;
-   ret = max77658_pm_write_reg(ctx, MAX77650_INTM_GLBL_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_INTM_GLBL_ADDR, write_data);
    ret = (max77658_pm_get_INT_M_GLBL(ctx) == (target_val & 0b01111111))?SUCCESS:ERROR;
   
    return ret;
@@ -3287,9 +3287,9 @@ int32_t max77658_pm_set_DBEN_GPI(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11101111) | ((target_val & 0b00000001) << 4);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, write_data);
    ret = (max77658_pm_get_DBEN_GPI(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3307,9 +3307,9 @@ int32_t max77658_pm_set_DO(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11110111) | ((target_val & 0b00000001) << 3);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, write_data);
    ret = (max77658_pm_get_DO(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3327,9 +3327,9 @@ int32_t max77658_pm_set_DRV(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111011) | ((target_val & 0b00000001) << 2);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, write_data);
    ret = (max77658_pm_get_DRV(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3347,9 +3347,9 @@ int32_t max77658_pm_set_DI(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111101) | ((target_val & 0b00000001) << 1);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, write_data);
    ret = (max77658_pm_get_DI(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3366,9 +3366,9 @@ int32_t max77658_pm_set_DIR(max77658_pm_t *ctx, uint8_t target_val){ //Returns G
    uint8_t curr_data;
    uint8_t write_data[1];
 
-   ret = max77658_pm_read_reg(ctx, MAX77650_CNFG_GPIO_ADDR, &curr_data);
+   ret = max77658_pm_read_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, &curr_data);
    write_data[0] = (curr_data & 0b11111110) | ((target_val & 0b00000001) << 0);
-   ret = max77658_pm_write_reg(ctx, MAX77650_CNFG_GPIO_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_CNFG_GPIO_ADDR, write_data);
    ret = (max77658_pm_get_DIR(ctx) == target_val)?SUCCESS:ERROR;
   
    return ret;
@@ -3387,7 +3387,7 @@ int32_t max77658_pm_set_INT_M_CHG(max77658_pm_t *ctx, uint8_t target_val)
    uint8_t write_data[1];
 
    write_data[0] = target_val & 0b01111111;
-   ret = max77658_pm_write_reg(ctx, MAX77650_INT_M_CHG_ADDR, write_data);
+   ret = max77658_pm_write_reg(ctx, MAX77658_PM_INT_M_CHG_ADDR, write_data);
    ret = (max77658_pm_get_INT_M_CHG(ctx) == write_data[0])?SUCCESS:ERROR;
   
    return ret;

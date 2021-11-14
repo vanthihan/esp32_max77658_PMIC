@@ -17,13 +17,13 @@
 /* Public defines ----------------------------------------------------- */
 // Project specific definitions *** adapt to your requirements! ***
 #define PMIC_partnumber 0x00  //placed PMIC part-numer on the board: MAX77650 or MAX77651
-#define MAX77650_CID 0x78     //OTP option
-#define MAX77650_ADDR 0x48    //alternate ADDR is 0x40
-#ifndef MAX77650_debug
-#define MAX77650_debug false
+#define MAX77658_PM_CID 0x78     //OTP option
+#define MAX77658_PM_ADDR 0x48    //alternate ADDR is 0x40
+#ifndef MAX77658_PM_debug
+#define MAX77658_PM_debug false
 #endif
-#ifndef MAX77650_I2C_port
-#define MAX77650_I2C_port 2     //I2C port of the host µC
+#ifndef MAX77658_PM_I2C_port
+#define MAX77658_PM_I2C_port 2     //I2C port of the host µC
 #endif
 
 /* Public enumerate/structure ----------------------------------------- */
