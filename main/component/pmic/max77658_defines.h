@@ -39,7 +39,7 @@
 #define MAX77658_CNFG_CHG_F  0x25U
 #define MAX77658_CNFG_CHG_G  0x26U
 #define MAX77658_CNFG_CHG_H  0x27U
-#define MAX77658_NFG_CHG_I   0x28U
+#define MAX77658_CNFG_CHG_I   0x28U
 
 /*
  * SBB
@@ -64,7 +64,7 @@
 /*
  * Fuel Gauge
  */
-#define Status and Configuration Registers
+//Status and Configuration Registers
 #define MAX77658_FG_Status       0x00U
 #define MAX77658_FG_VAlrtTh      0x01U
 #define MAX77658_FG_TAlrtTh      0x02U
