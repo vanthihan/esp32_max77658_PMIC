@@ -1018,6 +1018,11 @@ int32_t max77658_pm_get_IMON_DISCHG_SCALE(max77658_pm_t *ctx);
 int32_t max77658_pm_get_MUX_SEL(max77658_pm_t *ctx);
 
 /**
+ * @brief  Disables the automatic Low-Power Mode for Each SIMO Channel.[get]
+ */   
+int32_t max77658_pm_get_DIS_LPM(max77658_pm_t *ctx);
+
+/**
  * @brief  SBB2 Inductor Current Limit Offset .[get]
  * 
  * @param  ctx    read / write interface definitions
@@ -1309,6 +1314,433 @@ int32_t max77658_pm_get_EN_LDO1(max77658_pm_t *ctx);
 /*=======================================================================*/
 /*********************** Register writes *********************************/
 /*=======================================================================*/
+
+/**
+ * @brief  Global Interrupt Mask Register 0.[set]
+ */
+int32_t max77658_pm_set_INTM_GLBL0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Global Interrupt Mask Register 1.[set]
+ */
+int32_t max77658_pm_set_INTM_GLBL1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  nEN Internal Pullup Resistor.[set]
+ */
+int32_t max77658_pm_set_PU_DIS(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  nEN Internal Pullup Resistor.[set]                        
+ */
+int32_t max77658_pm_set_PU_DIS(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the Manual Reset Time (tMRST).[set]                           
+ */
+int32_t max77658_pm_set_T_MRST(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  nEN Input (ON-KEY) Default Configuration Modes.[set]
+ */
+int32_t max77658_pm_set_nEN_MODE(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Debounce Timer Enable for the nEN Pin.[set]
+ */
+int32_t max77658_pm_set_DBEN_nEN(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Software Reset Functions.[set]
+ */
+int32_t max77658_pm_set_SFT_CTRL(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Software Reset Functions.[set]
+ */
+int32_t max77658_pm_set_SBB_F_SHUTDN(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Alternate Mode Enable for GPIO0.[get]
+ */
+int32_t max77658_pm_set_ALT_GPIO0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  General Purpose Input Debounce Timer Enable for GPI0.[get]
+ */
+int32_t max77658_pm_set_DBEN_GPI_0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  General Purpose Output Data Output for GPO0.[set]
+ */
+int32_t max77658_pm_set_DO_0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  General Purpose Output Driver Type for GPO0.[set]
+ */
+int32_t max77658_pm_set_DRV_0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  GPIO Direction for GPIO0.[get]
+ */
+int32_t max77658_pm_set_DIR_0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Alternate Mode Enable for GPIO1.[set]
+ */
+int32_t max77658_pm_set_ALT_GPIO1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  General Purpose Input Debounce Timer Enable for GPI0.[set]
+ */
+int32_t max77658_pm_set_DBEN_GPI_1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  General Purpose Output Data Output for GPO0.[get]
+ */
+int32_t max77658_pm_set_DO_1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  General Purpose Output Driver Type for GPO0.[set]
+ */
+int32_t max77658_pm_set_DRV_1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  GPIO Direction for GPIO0.[set]
+ */
+int32_t max77658_pm_set_DIR_1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Alternate Mode Enable for GPIO1.[get]
+ */
+int32_t max77658_pm_set_ALT_GPIO2(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  General Purpose Input Debounce Timer Enable for GPI2.[get]
+ */
+int32_t max77658_pm_set_DBEN_GPI_2(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  General Purpose Output Data Output for GPO0.[get]
+ */
+int32_t max77658_pm_set_DO_2(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  General Purpose Output Driver Type for GPO0 .[get]
+ */
+int32_t max77658_pm_set_DRV_2(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  GPIO Direction for GPIO0.[get]
+ */
+int32_t max77658_pm_set_DIR_2(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Watchdog Timer Period. Sets tWD.[get]
+ */
+int32_t max77658_pm_set_WDT_PER(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Watchdog Timer Expired Action.[get]
+ */
+int32_t max77658_pm_set_WDT_MODE(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Watchdog Timer Clear Control.[get]
+ */
+int32_t max77658_pm_set_WDT_CLR(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Watchdog Timer Enable. Write protected depending on WDT_LOCK.[get]
+ */
+int32_t max77658_pm_set_WDT_EN(max77658_pm_t *ctx, uint8_t target_val);
+
+/**************************************************************/
+/************************CHARGER*******************************/
+/**************************************************************/
+
+/**
+ * @brief  Global Interrupt Mask Register.[get]
+ */
+int32_t max77658_pm_set_INT_M_CHG(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the THOT JEITA Temperature Threshold.[get]
+ */
+int32_t max77658_pm_set_THM_HOT(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the TWARM JEITA Temperature Threshold.[get]
+ */
+int32_t max77658_pm_set_THM_WARM(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the TCOOL JEITA Temperature Threshold.[get]
+ */
+int32_t max77658_pm_set_THM_COOL(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the TCOOL JEITA Temperature Threshold.[get]
+ */
+int32_t max77658_pm_set_THM_COLD(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Minimum CHGIN Regulation Voltage (VCHGIN-MIN).[get]
+ */
+int32_t max77658_pm_set_VCHGIN_MIN(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  CHGIN Input Current Limit (ICHGIN-LIM).[get]
+ */
+int32_t max77658_pm_set_ICHGIN_LIM(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the prequalification charge current (IPQ) as a percentage of IFAST-CHG..[get]
+ */
+int32_t max77658_pm_set_I_PQ(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the prequalification charge current (IPQ) as a percentage of IFAST-CHG..[get]
+ */
+int32_t max77658_pm_set_CHG_EN(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Battery Prequalification Voltage Threshold (VPQ).[get]
+ */
+int32_t max77658_pm_set_CHG_PQ(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Charger Termination Current (ITERM). I_TERM[1:0] sets the charger termination current 
+ *          as a percentage of the fast-charge current IFAST-CHG.[get]
+ */
+int32_t max77658_pm_set_I_TERM(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Top-Off Timer Value (tTO).[get]
+ */
+int32_t max77658_pm_set_T_TOPOFF(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the die junction temperature regulation point, TJ-REG.[get]
+ */
+int32_t max77658_pm_set_TJ_REG(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  System Voltage Regulation (VSYS-REG).[get]
+ */
+int32_t max77658_pm_set_VSYS_REG(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the fast-charge constant current value, IFAST-CHG.[get]
+ */
+int32_t max77658_pm_set_CHG_CC(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the fast-charge safety timer, tFC.[get]
+ */
+int32_t max77658_pm_set_T_FAST_CHG(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets IFAST-CHG-JEITA for when the battery is 
+ *         either cool or warm as defined by the VCOOL and VWARM temperature thresholds. This 
+ *         register is a don't care if the battery temperature is normal.[get]
+ */
+int32_t max77658_pm_set_CHG_CC_JEITA(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets fast-charge battery regulation voltage, VFAST-CHG.[get]
+ */
+int32_t max77658_pm_set_CHG_CV(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Setting this bit places CHGIN in USB suspend mode.[get]
+ */   
+int32_t max77658_pm_set_USBS(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Forced USB Suspend Mask.[get]
+ */   
+int32_t max77658_pm_set_FUS_M(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Sets the modified VFAST-CHG-JEITA for when the battery is either cool or warm as defined 
+ *         by the VCOOL and VWARM temperature thresholds. This register is a don't care if the battery temperature is normal.[get]
+ */   
+int32_t max77658_pm_set_CHG_CV_JEITA(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  VSYS_REG - CHG_CV clamp.[get]
+ */   
+int32_t max77658_pm_set_SYS_BAT_PRT(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Charger restart threshold enable.[get]
+ */   
+int32_t max77658_pm_set_CHR_TH_EN(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Selects the battery discharge current full-scale current value..[get]
+ */   
+int32_t max77658_pm_set_IMON_DISCHG_SCALE(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Selects the analog channel to connect to AMUX.[get]
+ */   
+int32_t max77658_pm_set_MUX_SEL(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Disables the automatic Low-Power Mode for Each SIMO Channel.[get]
+ */   
+int32_t max77658_pm_set_DIS_LPM(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SBB2 Inductor Current Limit Offset .[get]
+ */   
+int32_t max77658_pm_set_IPK_1P5A(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost (all channels) Drive Strength Trim.[get]
+ */   
+int32_t max77658_pm_set_DRV_SBB(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost Channel 0 Target Output Voltage.[get]
+ */   
+int32_t max77658_pm_set_TV_SBB0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Operation Mode of SBB0.[get]
+ */   
+int32_t max77658_pm_set_OP_MODE(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost Channel 0 Peak Current Limit.[get]
+ */   
+int32_t max77658_pm_set_IP_SBB0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost Channel 0 Active-Discharge Enable .[get]
+ */   
+int32_t max77658_pm_set_ADE_SBB0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Enable Control for SIMO Buck-Boost Channel 0, selecting either an FPS slot the channel 
+ *          powers-up and powers-down in or whether the channel is forced on or off.[get]
+ */   
+int32_t max77658_pm_set_EN_SBB0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost Channel 1 Target Output Voltage.[get]
+ */   
+int32_t max77658_pm_set_TV_SBB1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Operation Mode of SBB1.[get]
+ */   
+int32_t max77658_pm_set_OP_MODE_1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost Channel 1 Peak Current Limit.[get]
+ */   
+int32_t max77658_pm_set_IP_SBB1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost Channel 1 Active-Discharge Enable.[get]
+ */   
+int32_t max77658_pm_set_ADE_SBB1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Enable control for SIMO buck-boost channel 1, selecting either an FPS slot the channel 
+ *          powers-up and powers-down in or whether the channel is forced on or off.[get]
+ */   
+int32_t max77658_pm_set_EN_SBB1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost Channel 2 Target Output Voltage.[get]
+ */   
+int32_t max77658_pm_set_TV_SBB2(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Operation Mode of SBB2 .[get]
+ */   
+int32_t max77658_pm_set_OP_MODE_2(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost Channel 2 Peak Current Limit.[get]
+ */   
+int32_t max77658_pm_set_IP_SBB2(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost Channel 2 Active-Discharge Enable.[get]
+ */   
+int32_t max77658_pm_set_ADE_SBB2(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief   Enable control for SIMO buck-boost channel 2, selecting either an FPS slot the channel 
+ *          powers-up and powers-down in or whether the channel is forced on or off.[get]
+ */   
+int32_t max77658_pm_set_EN_SBB2(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  SIMO Buck-Boost Channel 0 Target Output Voltage.[get]
+ */   
+int32_t max77658_pm_set_TV_SBB0_DVS(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  LDO0 Output Voltage Offset.[get]
+ */   
+int32_t max77658_pm_set_TV_OFS_LDO0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  LDO0 Target Output Voltage.[get]
+ */   
+int32_t max77658_pm_set_TV_LDO0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Operation Mode of LDO0.[get]
+ */   
+int32_t max77658_pm_set_LDO0_MD(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  LDO0 Active-Discharge Enable.[get]
+ */   
+int32_t max77658_pm_set_ADE_LDO0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief   Enable Control for LDO0, selecting either an FPS slot the channel powers-up and 
+ *          powers-down in or whether the channel is forced on or off.[get]
+ */   
+int32_t max77658_pm_set_EN_LDO0(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  LDO1 Output Voltage Offset. This bit applies 
+ *         a 1.325V offset to the output voltage of the LDO1.[get]
+ */   
+int32_t max77658_pm_set_TV_OFS_LDO1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  LDO1 Target Output Voltage
+ *          The tareget output voltage of the LDO would be TV_OFS_LDO1 + TV_LDO1.[get]
+ */ 
+int32_t max77658_pm_set_TV_LDO1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  Operation Mode of LDO.[get]
+ */   
+int32_t max77658_pm_set_LDO1_MD(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  LDO1 Active-Discharge Enable.[get]
+ */   
+int32_t max77658_pm_set_ADE_LDO1(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief   Enable Control for LDO1, selecting either an FPS slot the channel powers-up and powers-
+ *          down in or whether the channel is forced on or off.[get]
+ */   
+int32_t max77658_pm_set_EN_LDO1(max77658_pm_t *ctx, uint8_t target_val);
+
+
 
 #endif /* MAIN_COMPONENT_MAX77658_PM_H_ */
 
