@@ -1741,6 +1741,5 @@ int32_t max77658_pm_set_ADE_LDO1(max77658_pm_t *ctx, uint8_t target_val);
 int32_t max77658_pm_set_EN_LDO1(max77658_pm_t *ctx, uint8_t target_val);
 
 
-
 #endif /* MAIN_COMPONENT_MAX77658_PM_H_ */
 

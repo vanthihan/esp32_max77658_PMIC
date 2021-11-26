@@ -35,47 +35,52 @@ void pmic_main_task()
 
    //Battery Parameters Storage from the Fuel Gauge MAX17055
    union max17055_u {
-       struct battery {
-           uint8_t avg_soc_FG;     // in Battery Percent
-          float tte_FG;            // in seconds
-           float ttf_FG;           // in seconds
-           int avg_vcell_FG;       // in 78.125uV per bit
-           float avg_curr_FG;      // in uAmps
-           float curr_FG;          // in uAmps
-           int rep_cap;            // in mAh
-           int rep_SOC;            // in %
+        struct battery {
+        int8_t avg_soc_FG;     // in Battery Percent
+        float tte_FG;            // in seconds
+        float ttf_FG;           // in seconds
+        int avg_vcell_FG;       // in 78.125uV per bit
+        float avg_curr_FG;      // in uAmps
+        float curr_FG;          // in uAmps
+        int rep_cap;            // in mAh
+int rep_SOC;            // in %
        } battery;
    } max17055_u;
 
    //Saved Parameters
-    //saved_param.cycles = 0; //This value is used for the save parameters function.
+   //saved_param.cycles = 0; //This value is used for the save parameters function.
 
-    int status; // stores return value of the status of setting up the MAX17055
-    uint8_t array_addresses[7] = {MODELCFG_REG,
-            DESIGNCAP_REG,
-            FULLCAPNOM_REG,
-            DPACC_REG,
-            DQACC_REG,
-            VEMPTY_REG,
-            ICHGTERM_REG
-           };
+   int status; // stores return value of the status of setting up the MAX17055
+   uint8_t array_addresses[7] = 
+   {
+      MODELCFG_REG,
+      DESIGNCAP_REG,
+      FULLCAPNOM_REG,
+      DPACC_REG,
+      DQACC_REG,
+      VEMPTY_REG,
+      ICHGTERM_REG
+   };
 
-    status = max77658_fg_init(m_max77658_fg_t);
-    printf("Init FuelGauge Function Status= %X \r\n",status); // Status shoudl retun Zero if the are no issues with the initialization.
+   status = max77658_fg_init(m_max77658_fg_t);
+   printf("Init FuelGauge Function Status= %X \r\n",status); // Status shoudl retun Zero if the are no issues with the initialization.
 
-    if (status == 0)
-       max77658_fg_save_Params(m_max77658_fg_t, saved_param);
+   if(status == 0)
+   {
+      max77658_fg_save_Params(m_max77658_fg_t, saved_param);
+   }
 
-    //Read DesignCap, Ichagterm, Vempty, dqacc, dpacc, MODELCFG, FullCapNom to verify values correspond to the expected stored Values.
-    // FullCapNom[mAh] = (dqacc[mAh]/dpacc[%])*100%
-    uint16_t regValue[7];
-    for(int i = 0 ; i < 7 ; i++) {
-        regValue[i] = max77658_fg_get_regInfo(m_max77658_fg_t, array_addresses[i]);
-        printf("%X"  ,regValue[i]);
-        printf(" ");
-    }
+   //Read DesignCap, Ichagterm, Vempty, dqacc, dpacc, MODELCFG, FullCapNom to verify values correspond to the expected stored Values.
+   // FullCapNom[mAh] = (dqacc[mAh]/dpacc[%])*100%
+   uint16_t regValue[7];
+   for(int i = 0 ; i < 7 ; i++) 
+   {
+      regValue[i] = max77658_fg_get_regInfo(m_max77658_fg_t, array_addresses[i]);
+      printf("%X", regValue[i]);
+      printf(" ");
+   }
 
-    bsp_delay_ms(2);
+   bsp_delay_ms(2);
 
    while(1)
    {

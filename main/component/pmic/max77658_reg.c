@@ -369,20 +369,20 @@ static int get_temperature(maxdev_ctx_t *ctx, int *temp)
 
 static int get_temperature_limit(maxdev_ctx_t *ctx, int *temp, int shift)
 {
-    int ret;
-    uint16_t data;
+   int ret;
+   uint16_t data;
 
-    ret = max77658_read_reg(ctx, TALRTTH_REG, &data);
-    if (ret < 0)
-        return ret;
+   ret = max77658_read_reg(ctx, TALRTTH_REG, &data);
+   if (ret < 0)
+      return ret;
 
-    *temp = data >> shift;
-    /* The value is signed */
-    if(*temp & 0x80)
-        *temp |= 0xFFFFFF00;
+   *temp = data >> shift;
+   /* The value is signed */
+   if(*temp & 0x80)
+      *temp |= 0xFFFFFF00;
 
-    /* LSB is 1DegreeC */
-    return 0;
+   /* LSB is 1DegreeC */
+   return 0;
 }
 
 static int32_t max77568_fg_initialize_config(maxdev_ctx_t *ctx)
