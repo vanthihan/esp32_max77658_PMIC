@@ -50,7 +50,7 @@ int bsp_i2c_write(uint8_t slave_addr, uint8_t reg_addr, uint8_t *p_data, uint32_
 
    if (ret != 0)
    {
-      ESP_LOGI(TAG, "I2C 0 error: %d. Restart I2C", ret);
+      ESP_LOGE(TAG, "I2C 0 error: %d. Restart I2C", ret);
       i2c_bus_delete(m_i2c_0_hdl);
       m_bsp_i2c_init();
       ret = i2c_bus_write_bytes(m_i2c_0_hdl, slave_addr, &reg_addr, sizeof(reg_addr), p_data, len);

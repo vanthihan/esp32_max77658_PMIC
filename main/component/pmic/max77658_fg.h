@@ -45,7 +45,6 @@ typedef struct
    uint8_t device_address;
    dev_read_ptr   read_reg;
    dev_write_ptr  write_reg;
-   platform_data *pdata;
 }max77658_fg_t;
 
 /*
@@ -153,7 +152,7 @@ int max77658_fg_get_Vcell(max77658_fg_t *ctx);
 /**
  * @brief       Get average voltage of the cell Function for MAX17055 Fuel Gauge.
  */
-int max77658_fg_get_avgVcell(max77658_fg_t *ctx);
+double max77658_fg_get_avgVcell(max77658_fg_t *ctx);
 
 /**
  * @brief       Get current Function for MAX17055 Fuel Gauge.

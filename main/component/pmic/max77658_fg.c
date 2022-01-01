@@ -9,8 +9,10 @@
 #define MAIN_COMPONENT_PMIC_MAX77658_C_
 
 #include "max77658_fg.h"
-
+#include "esp_log.h"
 #include "bsp.h"
+
+static const char *TAG = "MAX_FG";
 
 /* POR Mask */
 #define MAX17055_POR_MASK               (0xFFFD)
@@ -39,6 +41,7 @@
 //8-bit read address
 //static const uint8_t I2C_R_ADRS = 0x6D;
 
+platform_data pdata;
 
 /**
  * @brief      Reads from MAX17055 register.
@@ -55,7 +58,7 @@ int32_t max77658_fg_read_reg(max77658_fg_t *ctx, uint8_t reg_addr, uint16_t *val
    uint16_t mask = 0x00FF;
    uint8_t read_data[2];
 
-   ret = ctx->read_reg(ctx->device_address, reg_addr, read_data, 2);
+   ret = ctx->read_reg(ctx->device_address, reg_addr, &read_data, 2);
    if(ret == F_SUCCESS_0)
    {
       *value = (((read_data[1] & mask) << 8) + (read_data[0]));
@@ -75,6 +78,7 @@ int32_t max77658_fg_read_reg(max77658_fg_t *ctx, uint8_t reg_addr, uint16_t *val
  */
 int max77658_fg_write_reg(max77658_fg_t *ctx, uint8_t reg_addr, uint16_t reg_data)
 {
+
    int32_t ret;
    uint16_t mask = 0x00FF;
    uint8_t dataLSB;
@@ -164,11 +168,22 @@ int max77658_fg_init(max77658_fg_t *ctx)
    int time_out = 10;
    int32_t status;
    uint16_t hibcfg_value;
-   uint16_t read_data;
+   uint16_t version;
 
-   status = max77658_fg_read_reg(ctx, VERSION_REG, &read_data);
+   pdata.designcap  = 0x015E;  //Design Battery Capacity mAh this can change depending on the batteries implemented see battery data sheet for details.
+   pdata.ichgterm  = 0x0070;  // Charge Termination Current for the Battery This is specified by the manufacturer.
+   pdata.vempty  = 0x9600;  // Battery Empty Voltage This is specified by design, but manufacturer has a min Empty voltage specification.
+   pdata.vcharge  = 4200;  // Battery Charge Voltage can be obtained from MAX77650 configuration
+   pdata.rsense = 10; //5mOhms for MAX32620, keep in mind the MAX17055EVKIT has a 10mOhm resistor. This is a design specific value. Used for calculation results.
+
+   ESP_LOGI(TAG, "max77658_fg_init() Read Address = %X",ctx->device_address);
+
+   status = max77658_fg_read_reg(ctx, VERSION_REG, &version);
    if (status != F_SUCCESS_0)
       return status;
+
+   ESP_LOGI(TAG, "max77658_fg_init() version: %d", version);
+    
 
    ///STEP 0. Check for POR (Skip load model if POR bit is cleared)
 
@@ -183,7 +198,7 @@ int max77658_fg_init(max77658_fg_t *ctx)
 
    ///STEP 1.2. Force exit from hibernate
    hibcfg_value = max77658_fg_forcedExitHiberMode(ctx);
-
+   ESP_LOGI(TAG, "max77658_fg_init() hibcfg_value: %d", hibcfg_value);
 
    ///STEP 2. Initialize configuration
    ///STEP 2.1. Load EZ Config
@@ -195,7 +210,7 @@ int max77658_fg_init(max77658_fg_t *ctx)
       return ret;
    }
    ///STEP3. Restore original HibCfg
-   max77658_fg_write_reg(ctx, HIBCFG_REG, hibcfg_value);
+   max77658_fg_write_reg(&ctx, HIBCFG_REG, hibcfg_value);
 
 
    /* Clear Status.POR */
@@ -358,8 +373,10 @@ uint16_t max77658_fg_forcedExitHiberMode(max77658_fg_t *ctx)
  * @retval       0 on success
  * @retval       non-zero for errors
  */
-uint16_t max77658_fg_fg_config_option_1(max77658_fg_t *ctx)
+uint16_t max77658_fg_config_option_1(max77658_fg_t *ctx)
 {
+   ESP_LOGI(TAG, "max77658_fg_config_option_1() Read Address = %X",ctx->device_address);
+
     //STEP 2.1.1 EZ config values suggested by manufacturer.
     const int charger_th = 4275;
     const int chg_V_high = 51200; // scaling factor high voltage charger
@@ -368,20 +385,20 @@ uint16_t max77658_fg_fg_config_option_1(max77658_fg_t *ctx)
     const int param_EZ_FG2 = 0x8000;
     uint16_t dpacc, ret;
     const int DIV_32 = 5;//DesignCap divide by 32 for EZ config
-//    const int DIV_16 = 4;//DesignCap divide by 16 only for custom ini files
+    //    const int DIV_16 = 4;//DesignCap divide by 16 only for custom ini files
 
     //STEP 2.1.2 Store the EZ Config values into the appropriate registers.
-    ret = max77658_fg_write_reg(ctx, DESIGNCAP_REG, ctx->pdata->designcap);
-    ret = max77658_fg_write_reg(ctx, DQACC_REG, ctx->pdata->designcap >> DIV_32);
-    ret = max77658_fg_write_reg(ctx, ICHGTERM_REG, ctx->pdata->ichgterm);
-    ret = max77658_fg_write_reg(ctx, VEMPTY_REG, ctx->pdata->vempty);
+    ret = max77658_fg_write_reg(ctx, DESIGNCAP_REG, pdata.designcap);
+    ret = max77658_fg_write_reg(ctx, DQACC_REG, pdata.designcap >> DIV_32);
+    ret = max77658_fg_write_reg(ctx, ICHGTERM_REG, pdata.ichgterm);
+    ret = max77658_fg_write_reg(ctx, VEMPTY_REG, pdata.vempty);
 
-    if (ctx->pdata->vcharge > charger_th) {
-        dpacc = (ctx->pdata->designcap >> DIV_32) * chg_V_high / ctx->pdata->designcap;
+    if (pdata.vcharge > charger_th) {
+        dpacc = (pdata.designcap >> DIV_32) * chg_V_high / pdata.designcap;
         ret = max77658_fg_write_reg(ctx, DPACC_REG, dpacc);
         ret = max77658_fg_write_reg(ctx, MODELCFG_REG, param_EZ_FG1); //
     } else {
-        dpacc = (ctx->pdata->designcap >> DIV_32) * chg_V_low / ctx->pdata->designcap;
+        dpacc = (pdata.designcap >> DIV_32) * chg_V_low / pdata.designcap;
         ret = max77658_fg_write_reg(ctx, DPACC_REG, dpacc);
         ret = max77658_fg_write_reg(ctx, MODELCFG_REG, param_EZ_FG2);
     }
@@ -401,13 +418,13 @@ int32_t max77658_fg_config_option_2(max77658_fg_t *ctx)
    int32_t ret;
 
    /* Step 2.2: Option 2 Custom Short INI without OCV Table */
-   ret = max77658_fg_write_reg(ctx, DESIGNCAP_REG, ctx->pdata->designcap);
-   ret = max77658_fg_write_reg(ctx, ICHGTERM_REG, ctx->pdata->ichgterm);
-   ret = max77658_fg_write_reg(ctx, VEMPTY_REG, ctx->pdata->vempty);
-   max77658_fg_write_and_verify_reg(ctx, LEARNCFG_REG, ctx->pdata->learncfg); /* Optional */
-   max77658_fg_write_and_verify_reg(ctx, FULLSOCTHR_REG, ctx->pdata->fullsocthr); /* Optional */
+   ret = max77658_fg_write_reg(ctx, DESIGNCAP_REG, pdata.designcap);
+   ret = max77658_fg_write_reg(ctx, ICHGTERM_REG, pdata.ichgterm);
+   ret = max77658_fg_write_reg(ctx, VEMPTY_REG, pdata.vempty);
+   max77658_fg_write_and_verify_reg(ctx, LEARNCFG_REG, pdata.learncfg); /* Optional */
+   max77658_fg_write_and_verify_reg(ctx, FULLSOCTHR_REG, pdata.fullsocthr); /* Optional */
 
-   ret = max77658_fg_write_reg(ctx, MODELCFG_REG, ctx->pdata->modelcfg);
+   ret = max77658_fg_write_reg(ctx, MODELCFG_REG, pdata.modelcfg);
 
    /* Poll ModelCFG.ModelRefresh bit for clear */
    ret = max77658_fg_poll_flag_clear(ctx, MODELCFG_REG, MAX17055_MODELCFG_REFRESH, 500);
@@ -417,12 +434,12 @@ int32_t max77658_fg_config_option_2(max77658_fg_t *ctx)
       return ret;
    }
 
-   ret = max77658_fg_write_reg(ctx, RCOMP0_REG, ctx->pdata->rcomp0);
-   ret = max77658_fg_write_reg(ctx, TEMPCO_REG, ctx->pdata->tempco);
-   ret = max77658_fg_write_reg(ctx, QRTABLE00_REG, ctx->pdata->qrtable00);
-   ret = max77658_fg_write_reg(ctx, QRTABLE10_REG, ctx->pdata->qrtable10);
-   ret = max77658_fg_write_reg(ctx, QRTABLE20_REG, ctx->pdata->qrtable20);  /* Optional */
-   ret = max77658_fg_write_reg(ctx, QRTABLE30_REG, ctx->pdata->qrtable30);  /* Optional */
+   ret = max77658_fg_write_reg(ctx, RCOMP0_REG, pdata.rcomp0);
+   ret = max77658_fg_write_reg(ctx, TEMPCO_REG, pdata.tempco);
+   ret = max77658_fg_write_reg(ctx, QRTABLE00_REG, pdata.qrtable00);
+   ret = max77658_fg_write_reg(ctx, QRTABLE10_REG, pdata.qrtable10);
+   ret = max77658_fg_write_reg(ctx, QRTABLE20_REG, pdata.qrtable20);  /* Optional */
+   ret = max77658_fg_write_reg(ctx, QRTABLE30_REG, pdata.qrtable30);  /* Optional */
 
    return ret;
 }
@@ -518,7 +535,7 @@ int max77658_fg_get_battCAP(max77658_fg_t *ctx)
     if (ret < F_SUCCESS_0)
         return ret;
     else
-        design_rsense = ctx->pdata->rsense;
+        design_rsense = pdata.rsense;
     ret = max77658_fg_raw_cap_to_uAh((uint32_t)repcap_data, design_rsense);
     if (ret < F_SUCCESS_0)
         return ret;
@@ -720,10 +737,10 @@ int max77658_fg_get_Vcell(max77658_fg_t *ctx)
  * @retval      avgVcell_data  - avgvcell data from the AVGVCELL_REG register in uVolts.
  * @retval      non-0 negative values check for errors
  */
-int max77658_fg_get_avgVcell(max77658_fg_t *ctx)
+double max77658_fg_get_avgVcell(max77658_fg_t *ctx)
 {
 
-    int ret;
+    double ret;
     uint16_t avgVcell_data;
 
     ret = max77658_fg_read_reg(ctx, AVGVCELL_REG, &avgVcell_data);
@@ -756,7 +773,7 @@ float max77658_fg_get_Current(max77658_fg_t *ctx)
     if (ret < F_SUCCESS_0)
         return ret;
     else
-        design_rsense = ctx->pdata->rsense;
+        design_rsense = pdata.rsense;
     f_ret = max77658_fg_raw_current_to_uamps((uint32_t)curr_data, design_rsense);
     return f_ret;
 }
@@ -783,7 +800,7 @@ float max77658_fg_get_AvgCurrent(max77658_fg_t *ctx)
         return ret;
     else
         avgCurr_data = data;
-    design_rsense = ctx->pdata->rsense;
+    design_rsense = pdata.rsense;
     avgCurr_data = max77658_fg_raw_current_to_uamps((uint32_t)data, design_rsense);
     return avgCurr_data;
 }

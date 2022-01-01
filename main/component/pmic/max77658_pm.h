@@ -12,7 +12,6 @@
 /* Includes ----------------------------------------------------------- */
 #include <stdio.h>
 #include <stdint.h>
-#include "max77658_pm_types.h"
 
 /* Public defines ----------------------------------------------------- */
 // Project specific definitions *** adapt to your requirements! ***
@@ -46,6 +45,11 @@ typedef struct
    pm_write_ptr  write_reg;
 } max77658_pm_t;
 
+/**
+  * @brief  Baseline Initialization following rules printed in MAX77650 Programmres Guide Chapter 4 Page 5
+  *
+  */
+void max77658_pm_base_line_init(max77658_pm_t *ctx);
 
 /**
   * @brief  Read generic device register
@@ -57,6 +61,7 @@ int32_t max77658_pm_read_reg(max77658_pm_t *ctx, uint8_t reg, uint8_t *data);
  */
 int32_t max77658_pm_write_reg(max77658_pm_t *ctx, uint8_t reg, uint8_t *data);
 
+uint8_t max77658_pm_get_bit(uint8_t input, uint8_t bit_order);
 
 /*****************Read Register***********************/
 
@@ -1339,6 +1344,11 @@ int32_t max77658_pm_set_PU_DIS(max77658_pm_t *ctx, uint8_t target_val);
  * @brief  Sets the Manual Reset Time (tMRST).[set]                           
  */
 int32_t max77658_pm_set_T_MRST(max77658_pm_t *ctx, uint8_t target_val);
+
+/**
+ * @brief  nEN Input (ON-KEY) Default Configuration Modes.[set]
+ */
+int32_t max77658_pm_set_SBIA_LPM(max77658_pm_t *ctx, uint8_t target_val);
 
 /**
  * @brief  nEN Input (ON-KEY) Default Configuration Modes.[set]

@@ -9,7 +9,7 @@
 #define MAIN_COMPONENT_PMIC_MAX77658_H_
 
 /* Includes ----------------------------------------------------------- */
-#include "max77658_reg.h"
+// #include "max77658_reg.h"
 
 /* Public defines ----------------------------------------------------- */
 /* Public enumerate/structure ----------------------------------------- */

@@ -9,6 +9,6 @@
 #define MAIN_TASK_PMIC_TASK_H_
 
 void pmic_main_task();
-
+void pmic_task();
 
 #endif /* MAIN_TASK_PMIC_TASK_H_ */

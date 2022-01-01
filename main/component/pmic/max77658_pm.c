@@ -6,6 +6,7 @@
  */
 
 /* Includes ----------------------------------------------------------- */
+#include "esp_log.h"
 #include "max77658_pm.h"
 #include "max77658_defines.h"
 
@@ -23,6 +24,41 @@ static const char *TAG = "MAX77658 PM";
 
 /* Private function prototypes ---------------------------------------- */
 /* Function definitions ----------------------------------------------- */
+
+/**
+  * @brief  Baseline Initialization following rules printed in MAX77650 Programmres Guide Chapter 4 Page 5
+  *
+  */
+void max77658_pm_base_line_init(max77658_pm_t *ctx)
+{
+   ESP_LOGI(TAG, "max77658_pm_base_line_init() Baseline Initialization!");
+
+   if(max77658_pm_set_SBIA_LPM(ctx, 0x00) > -1)  //Set Main Bias to normal Mode
+   {
+      ESP_LOGI(TAG, "max77658_pm_base_line_init() Set Main Bias to normal Mode: OK");
+   }
+   if(max77658_pm_set_nEN_MODE(ctx, 0x00) > -1)  //set on/off-button to push-button
+   {
+      ESP_LOGI(TAG, "max77658_pm_base_line_init() Set on/off-button to push-button: OK");
+   }
+   if(max77658_pm_set_DBEN_nEN(ctx, 0x00) > -1)  //Set nEN input debounce time to 30ms
+   {
+      ESP_LOGI(TAG, "max77658_pm_base_line_init() Set nEN input debounce time to 30ms: OK");
+   }
+   if(max77658_pm_get_DIDM(ctx) == 0x00) //0 = MAX77658 
+   {
+      ESP_LOGI(TAG, "max77658_pm_base_line_init() Get DIDM: 0 = MAX77658-OK ");
+   }
+   if(max77658_pm_get_CID(ctx) > -1) //Checking OTP options
+   {
+      ESP_LOGI(TAG, "max77658_pm_base_line_init() Get CID: OK ");
+   }
+}
+
+uint8_t max77658_pm_get_bit(uint8_t input, uint8_t bit_order)
+{
+   return (input >> bit_order) & 0b00000001;
+}
 
 /**
   * @brief  Read generic device register
@@ -75,7 +111,7 @@ int32_t max77658_pm_get_INT_GLBL0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INT_GLBL0, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data;
    }
@@ -96,7 +132,7 @@ int32_t max77658_pm_get_INT_GLBL1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INT_GLBL1, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb01111111;
    }
@@ -117,7 +153,7 @@ int32_t max77658_pm_get_ERCFLAG(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_ERCFLAG, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data;
    }
@@ -139,7 +175,7 @@ int32_t max77658_pm_get_DIDM(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data << 7) & 0x0b00000001;
    }
@@ -161,7 +197,7 @@ int32_t max77658_pm_get_BOK(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data << 6) & 0x0b00000001;
    }
@@ -183,7 +219,7 @@ int32_t max77658_pm_get_DOD0_S(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data << 5) & 0x0b00000001;
    }
@@ -205,7 +241,7 @@ int32_t max77658_pm_get_DOD1_S(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data << 4) & 0x0b00000001;
    }
@@ -227,7 +263,7 @@ int32_t max77658_pm_get_TJAL2_S(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data << 3) & 0x0b00000001;
    }
@@ -249,7 +285,7 @@ int32_t max77658_pm_get_TJAL1_S(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data << 2) & 0x0b00000001;
    }
@@ -271,7 +307,7 @@ int32_t max77658_pm_get_STAT_EN(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data << 1) & 0x0b00000001;
    }
@@ -293,7 +329,7 @@ int32_t max77658_pm_get_STAT_IRQ(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0x0b00000001;
    }
@@ -315,7 +351,7 @@ int32_t max77658_pm_get_INTM_GLBL0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INTM_GLBL0, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data;
    }
@@ -337,7 +373,7 @@ int32_t max77658_pm_get_INTM_GLBL1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INTM_GLBL1, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0b01111111;
    }
@@ -359,7 +395,7 @@ int32_t max77658_pm_get_PU_DIS(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 7) & 0b00000001;
    }
@@ -380,7 +416,7 @@ int32_t max77658_pm_get_T_MRST(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 6) & 0b00000001;
    }
@@ -402,7 +438,8 @@ int32_t max77658_pm_get_SBIA_LPM(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GLBL, &data);
-   if(ret > 0)
+
+   if(ret > -1)
    {
       ret = (data >> 5) & 0b00000001;
    }
@@ -426,7 +463,7 @@ int32_t max77658_pm_get_nEN_MODE(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0b00000011;
    }
@@ -448,7 +485,7 @@ int32_t max77658_pm_get_DBEN_nEN(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0b00000011;
    }
@@ -469,7 +506,7 @@ int32_t max77658_pm_get_SFT_CTRL(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GLBL, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0b00000011;
    }
@@ -491,7 +528,7 @@ int32_t max77658_pm_get_SBB_F_SHUTDN(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO0, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 7) & 0b00000001;
    }
@@ -513,7 +550,7 @@ int32_t max77658_pm_get_ALT_GPIO0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO0, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 5) & 0b00000001;
    }
@@ -535,7 +572,7 @@ int32_t max77658_pm_get_DBEN_GPI_0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO0, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0b00000001;
    }
@@ -559,7 +596,7 @@ int32_t max77658_pm_get_DO_0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO0, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0b00000001;
    }
@@ -582,7 +619,7 @@ int32_t max77658_pm_get_DRV_0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO0, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0b00000001;
    }
@@ -605,7 +642,7 @@ int32_t max77658_pm_get_DI_0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO0, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 1) & 0b00000001;
    }
@@ -627,7 +664,7 @@ int32_t max77658_pm_get_DIR_0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO0, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0b00000001;
    }
@@ -650,7 +687,7 @@ int32_t max77658_pm_get_ALT_GPIO1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO1, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 5) & 0b00000001;
    }
@@ -672,7 +709,7 @@ int32_t max77658_pm_get_DBEN_GPI_1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO1, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0b00000001;
    }
@@ -696,7 +733,7 @@ int32_t max77658_pm_get_DO_1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO1, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0b00000001;
    }
@@ -719,7 +756,7 @@ int32_t max77658_pm_get_DRV_1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO1, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0b00000001;
    }
@@ -742,7 +779,7 @@ int32_t max77658_pm_get_DI_1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO1, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 1) & 0b00000001;
    }
@@ -764,7 +801,7 @@ int32_t max77658_pm_get_DIR_1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO1, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0b00000001;
    }
@@ -786,7 +823,7 @@ int32_t max77658_pm_get_ALT_GPIO2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO2, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 5) & 0b00000001;
    }
@@ -808,7 +845,7 @@ int32_t max77658_pm_get_DBEN_GPI_2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO2, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0b00000001;
    }
@@ -832,7 +869,7 @@ int32_t max77658_pm_get_DO_2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO2, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0b00000001;
    }
@@ -855,7 +892,7 @@ int32_t max77658_pm_get_DRV_2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO2, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0b00000001;
    }
@@ -878,7 +915,7 @@ int32_t max77658_pm_get_DI_2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO2, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 1) & 0b00000001;
    }
@@ -900,7 +937,7 @@ int32_t max77658_pm_get_DIR_2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GPIO2, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0b00000001;
    }
@@ -922,7 +959,7 @@ int32_t max77658_pm_get_CID(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CID, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0b00001111;
    }
@@ -946,7 +983,7 @@ int32_t max77658_pm_get_WDT_PER(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_WDT, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0b00000011;
    }
@@ -968,7 +1005,7 @@ int32_t max77658_pm_get_WDT_MODE(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_WDT, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0b00000001;
    }
@@ -990,7 +1027,7 @@ int32_t max77658_pm_get_WDT_CLR(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_WDT, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0b00000001;
    }
@@ -1012,7 +1049,7 @@ int32_t max77658_pm_get_WDT_EN(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_WDT, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 1) & 0b00000001;
    }
@@ -1034,7 +1071,7 @@ int32_t max77658_pm_get_WDT_LOCK(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_WDT, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0b00000001;
    }
@@ -1061,7 +1098,7 @@ int32_t max77658_pm_get_SYS_CNFG_I(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INT_CHG, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 6) & 0b00000001;
    }
@@ -1084,7 +1121,7 @@ int32_t max77658_pm_get_SYS_CTRL_I(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INT_CHG, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 5) & 0b00000001;
    }
@@ -1107,7 +1144,7 @@ int32_t max77658_pm_get_CHGIN_CTRL_I(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INT_CHG, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0b00000001;
    }
@@ -1130,7 +1167,7 @@ int32_t max77658_pm_get_TJ_REG_I(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INT_CHG, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0b00000001;
    }
@@ -1153,7 +1190,7 @@ int32_t max77658_pm_get_CHGIN_I(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INT_CHG, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0b00000001;
    }
@@ -1176,7 +1213,7 @@ int32_t max77658_pm_get_CHG_I(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INT_CHG, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 1) & 0b00000001;
    }
@@ -1199,7 +1236,7 @@ int32_t max77658_pm_get_THM_I(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INT_CHG, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0b00000001;
    }
@@ -1222,7 +1259,7 @@ int32_t max77658_pm_get_VCHGIN_MIN_STAT(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_CHG_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 6) & 0b00000001;
    }
@@ -1245,7 +1282,7 @@ int32_t max77658_pm_get_ICHGIN_LIM_STAT(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_CHG_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 5) & 0b00000001;
    }
@@ -1268,7 +1305,7 @@ int32_t max77658_pm_get_VSYS_MIN_STAT(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_CHG_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0b00000001;
    }
@@ -1291,7 +1328,7 @@ int32_t max77658_pm_get_TJ_REG_STAT(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_CHG_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0b00000001;
    }
@@ -1319,7 +1356,7 @@ int32_t max77658_pm_get_THM_DTLS(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_CHG_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0b0000111;
    }
@@ -1354,7 +1391,7 @@ int32_t max77658_pm_get_CHG_DTLS(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_CHG_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0b0001111;
    }
@@ -1379,7 +1416,7 @@ int32_t max77658_pm_get_CHGIN_DTLS(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_CHG_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0b0000011;
    }
@@ -1402,7 +1439,7 @@ int32_t max77658_pm_get_CHG(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_CHG_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 1) & 0b0000001;
    }
@@ -1427,7 +1464,7 @@ int32_t max77658_pm_get_TIME_SUS(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_STAT_CHG_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0b0000001;
    }
@@ -1448,7 +1485,7 @@ int32_t max77658_pm_get_INT_M_CHG(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_INT_M_CHG, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data;
    }
@@ -1472,7 +1509,7 @@ int32_t max77658_pm_get_THM_HOT(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 6) & 0xb00000011;
    }
@@ -1496,7 +1533,7 @@ int32_t max77658_pm_get_THM_WARM(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0xb00000011;
    }
@@ -1520,7 +1557,7 @@ int32_t max77658_pm_get_THM_COOL(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0xb00000011;
    }
@@ -1544,7 +1581,7 @@ int32_t max77658_pm_get_THM_COLD(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000011;
    }
@@ -1572,7 +1609,7 @@ int32_t max77658_pm_get_VCHGIN_MIN(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 5) & 0xb00000111;
    }
@@ -1598,7 +1635,7 @@ int32_t max77658_pm_get_ICHGIN_LIM(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0xb00000011;
    }
@@ -1620,7 +1657,7 @@ int32_t max77658_pm_get_I_PQ(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0xb00000011;
    }
@@ -1643,7 +1680,7 @@ int32_t max77658_pm_get_CHG_EN(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000001;
    }
@@ -1671,7 +1708,7 @@ int32_t max77658_pm_get_CHG_PQ(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_C, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 5) & 0xb00000111;
    }
@@ -1696,7 +1733,7 @@ int32_t max77658_pm_get_I_TERM(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_C, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0xb00000011;
    }
@@ -1724,7 +1761,7 @@ int32_t max77658_pm_get_T_TOPOFF(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_C, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000111;
    }
@@ -1749,7 +1786,7 @@ int32_t max77658_pm_get_TJ_REG(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_D, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 5) & 0xb00000111;
    }
@@ -1771,7 +1808,7 @@ int32_t max77658_pm_get_VSYS_REG(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_D, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00011111;
    }
@@ -1793,7 +1830,7 @@ int32_t max77658_pm_get_CHG_CC(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_E, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0xb00111111;
    }
@@ -1817,7 +1854,7 @@ int32_t max77658_pm_get_T_FAST_CHG(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_E, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000011;
    }
@@ -1841,7 +1878,7 @@ int32_t max77658_pm_get_CHG_CC_JEITA(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_F, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0xb00111111;
    }
@@ -1863,7 +1900,7 @@ int32_t max77658_pm_get_CHG_CV(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_G, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0xb00111111;
    }
@@ -1886,7 +1923,7 @@ int32_t max77658_pm_get_USBS(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_G, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 1) & 0xb00000001;
    }
@@ -1907,7 +1944,7 @@ int32_t max77658_pm_get_FUS_M(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_G, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000001;
    }
@@ -1930,7 +1967,7 @@ int32_t max77658_pm_get_CHG_CV_JEITA(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_H, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 2) & 0xb00111111;
    }
@@ -1954,7 +1991,7 @@ int32_t max77658_pm_get_SYS_BAT_PRT(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_H, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 1) & 0xb00000001;
    }
@@ -1974,7 +2011,7 @@ int32_t max77658_pm_get_CHR_TH_EN(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_H, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000001;
    }
@@ -2005,7 +2042,7 @@ int32_t max77658_pm_get_IMON_DISCHG_SCALE(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_I, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0xb00001111;
    }
@@ -2036,7 +2073,7 @@ int32_t max77658_pm_get_MUX_SEL(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_CHG_I, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00001111;
    }
@@ -2058,7 +2095,7 @@ int32_t max77658_pm_get_DIS_LPM(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB_TOP, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 7) & 0xb00000001;
    }
@@ -2080,7 +2117,7 @@ int32_t max77658_pm_get_IPK_1P5A(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB_TOP, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 6) & 0xb00000001;
    }
@@ -2104,7 +2141,7 @@ int32_t max77658_pm_get_DRV_SBB(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB_TOP, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000011;
    }
@@ -2125,7 +2162,7 @@ int32_t max77658_pm_get_TV_SBB0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB0_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data;
    }
@@ -2149,7 +2186,7 @@ int32_t max77658_pm_get_OP_MODE(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB0_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 6) & 0xb00000011;
    }
@@ -2173,7 +2210,7 @@ int32_t max77658_pm_get_IP_SBB0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB0_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0xb00000011;
    }
@@ -2198,7 +2235,7 @@ int32_t max77658_pm_get_ADE_SBB0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB0_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0xb00000001;
    }
@@ -2227,7 +2264,7 @@ int32_t max77658_pm_get_EN_SBB0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB0_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000111;
    }
@@ -2248,7 +2285,7 @@ int32_t max77658_pm_get_TV_SBB1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB1_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data;
    }
@@ -2272,7 +2309,7 @@ int32_t max77658_pm_get_OP_MODE_1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB1_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 6) & 0xb00000011;
    }
@@ -2296,7 +2333,7 @@ int32_t max77658_pm_get_IP_SBB1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB1_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0xb00000011;
    }
@@ -2321,7 +2358,7 @@ int32_t max77658_pm_get_ADE_SBB1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB1_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0xb00000001;
    }
@@ -2350,7 +2387,7 @@ int32_t max77658_pm_get_EN_SBB1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB1_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000011;
    }
@@ -2371,7 +2408,7 @@ int32_t max77658_pm_get_TV_SBB2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB2_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data;
    }
@@ -2395,7 +2432,7 @@ int32_t max77658_pm_get_OP_MODE_2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB2_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 6) & 0xb00000011;
    }
@@ -2419,7 +2456,7 @@ int32_t max77658_pm_get_IP_SBB2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB2_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0xb00000011;
    }
@@ -2441,7 +2478,7 @@ int32_t max77658_pm_get_ADE_SBB2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB2_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0xb00000001;
    }
@@ -2470,7 +2507,7 @@ int32_t max77658_pm_get_EN_SBB2(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_SBB2_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000011;
    }
@@ -2491,7 +2528,7 @@ int32_t max77658_pm_get_TV_SBB0_DVS (max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_DVS_SBB0_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data;
    }
@@ -2514,7 +2551,7 @@ int32_t max77658_pm_get_TV_OFS_LDO0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_LDO0_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 7) & 0xb00000001;
    }
@@ -2536,7 +2573,7 @@ int32_t max77658_pm_get_TV_LDO0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_LDO0_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb01111111;
    }
@@ -2558,7 +2595,7 @@ int32_t max77658_pm_get_LDO0_MD(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_LDO0_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0xb00000001;
    }
@@ -2580,7 +2617,7 @@ int32_t max77658_pm_get_ADE_LDO0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_LDO0_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0xb00000001;
    }
@@ -2609,7 +2646,7 @@ int32_t max77658_pm_get_EN_LDO0(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_LDO0_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000011;
    }
@@ -2632,7 +2669,7 @@ int32_t max77658_pm_get_TV_OFS_LDO1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_LDO1_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data > 6) & 0xb00000001;
    }
@@ -2654,7 +2691,7 @@ int32_t max77658_pm_get_TV_LDO1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_LDO1_A, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb01111111;
    }
@@ -2676,7 +2713,7 @@ int32_t max77658_pm_get_LDO1_MD(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_LDO1_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 4) & 0xb00000001;
    }
@@ -2698,7 +2735,7 @@ int32_t max77658_pm_get_ADE_LDO1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_LDO1_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = (data >> 3) & 0xb00000001;
    }
@@ -2727,7 +2764,7 @@ int32_t max77658_pm_get_EN_LDO1(max77658_pm_t *ctx)
    uint8_t data;
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_LDO1_B, &data);
-   if(ret > 0)
+   if(ret > -1)
    {
       ret = data & 0xb00000011;
    }
@@ -2835,11 +2872,11 @@ int32_t max77658_pm_set_T_MRST(max77658_pm_t *ctx, uint8_t target_val)
 int32_t max77658_pm_set_SBIA_LPM(max77658_pm_t *ctx, uint8_t target_val)
 {
    int32_t ret;
-   uint8_t curr_data;
+   uint8_t curr_data = 0xFF;
    uint8_t write_data[1];
 
    ret = max77658_pm_read_reg(ctx, MAX77658_CNFG_GLBL, &curr_data);
-   write_data[0] = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
+   write_data[0]  = (curr_data & 0b11011111) | ((target_val & 0b00000001) << 5);
    ret = max77658_pm_write_reg(ctx, MAX77658_CNFG_GLBL, write_data);
    ret = (max77658_pm_get_SBIA_LPM(ctx) == target_val)?SUCCESS:ERROR;
 
